@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="br" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content)">
+<head th:replace="~{fragments/head}">
+  <title>Votação Vale</title>
+</head>
+<body>
+
+    <div id="telaDeCarregamento" transition-style="out:wipe:left" class="overrides">
+        <img th:src="@{/assets/images/brasao_itapura.png}" alt="brasão"/>
+        <div class="spinner-border m-5" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <nav class="navbar bg-body-tertiary justify-content-center">
+        <div class="nav-center" id="brasaoNav">
+            <div class="fw-semibold">
+                <img th:src="@{/assets/images/brasao_itapura.png}" width="45" height="45" alt="brasão"/>
+                <span class="fw-semibold">Prefeitura Municipal de Itapura</span>
+            </div>
+
+            <ul class="nav nav-underline" id="linksNav">
+                <li class="nav-item">
+                    <a class="nav-link" id="teste"  aria-current="page" href="/votacao">Votação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/votacao/relatorio">Relatório</a>
+                </li>
+            </ul>
+
+            <div id="userNav">
+                <span>Cargo - Funcionário</span>
+                <i class="bi bi-person"></i>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div th:replace="${content}"></div>
+    </main>
+
+    <footer class="fw-semibold fst-italic">
+        <div>
+            <span>Desenvolvido por: Rian Porfírio</span>
+            |
+            <a href="https://www.linkedin.com/in/rian-porf%C3%ADrio/" target="_blank"><i class="bi bi-linkedin"></i></a>
+            |
+            <a href="mailto:rianporfiriodev@gmail.com" class="text-decoration-none">rianporfiriodev@gmail.com</a>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16.4
+    container_name: hoje naaao espertiinho
+    environment:
+      POSTGRES_USER: hoje naaao espertiinho
+      POSTGRES_PASSWORD: hoje naaao espertiinho
+      POSTGRES_DB: hoje naaao espertiinho
+    ports:
+      - "9090:5432"

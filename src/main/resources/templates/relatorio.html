@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout::layout(~{::content})}">
+<div th:fragment="content" class="h-100 m-auto shadow-none bg-transparent container-padrao scrollbar-container wipe-in-left">
+
+    <div style="margin-bottom: 1rem;">
+        <input type="text" placeholder="Pesquisar empresa..." style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+    </div>
+
+    <div class="grid-container">
+        <div th:each="empresa : ${empresas}">
+            <div th:replace="~{fragments/empresa::empresa(~{empresa})}"></div>
+        </div>
+    </div>
+
+</div>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout::layout(~{::content})}">
+  <div th:fragment="content" class="h-100 d-flex justify-content-center align-items-center flex-column wipe-out-left">
+
+    <div>
+
+      <div class="mb-2 d-flex gap-3">
+        <input th:if="${!#lists.isEmpty(opcoes)}" class="form-control mr-sm-2" type="search" placeholder="Pesquisar empresa" aria-label="Search">
+        <button type="button" class="btn btn-primary m-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          <i class="bi bi-plus fs-5"></i>
+        </button>
+      </div>
+
+      <div class="container-padrao scrollbar-container">
+
+        <div th:if="${#lists.isEmpty(opcoes)}" class="d-flex flex-column">
+          <p class="text-center fw-semibold">Não há empresas cadastradas</p>
+          <button type="button" class="btn btn-primary w-25 m-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            <i class="bi bi-plus fs-5"></i>
+          </button>
+        </div>
+
+        <div th:if="${!#lists.isEmpty(opcoes)}">
+          <div th:each="opcao : ${opcoes}">
+            <div th:replace="~{fragments/opcoes::opcaoContainer(${opcao})}"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+              <form>
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Nome da Empresa</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Insira o nome da empresa" aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlFile1">Insira a Logo da Empresa</label>
+                  <input type="file"
+                         class="form-control-file mt-2"
+                         id="exampleFormControlFile1"
+                         accept=".jpg, .jpeg, .png"
+                         name="Imagem da empresa">
+                </div>
+              </form>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Adicionar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</html>
