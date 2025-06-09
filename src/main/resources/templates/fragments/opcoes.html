@@ -1,17 +1,36 @@
+<html lang="br" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <div class="card mb-3" th:fragment="opcaoContainer(opcao)">
-    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start">
+    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start" >
         <div class="opcao-imagem">
             <img src="" width="150">
         </div>
         <div class="mb-3 mb-md-0 px-md-3">
             <h5 class="card-title text-break fs-5" th:text="${opcao.nome}">Nome da Opcao</h5>
         </div>
-        <div>
-            <button class="btn btn-dark text-nowrap" data-bs-target="#exampleModalToggle" data-bs-toggle="modal"><i class="bi bi-check2"></i> Votar</button>
+        <div id="botoesOpcao">
+            <button class="btn btn-primary text-nowrap" th:attr="data-bs-target='#modalInformativeToggle' + ${opcao.getId()}" data-bs-toggle="modal"><i class="bi bi-check2"></i> Votar</button>
+            <div class="dropdown" sec:authorize="hasRole('ADMIN')">
+                <button class="btn btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <button type="button" class="dropdown-item" data-bs-toggle="modal" th:attr="data-bs-target='#modalDelete' + ${opcao.getId()}">
+                            Excluir
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="dropdown-item" data-bs-toggle="modal" th:attr="data-bs-target='#modalEdit' + ${opcao.getId()}">
+                            Editar
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
-    <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal fade" th:id="'modalInformativeToggle' + ${opcao.getId()}" aria-hidden="true" aria-labelledby="modalInformativeToggleLabel" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header justify-content-center bg-light">
@@ -29,18 +48,20 @@
                         <p class="fst-italic fw-lighter">
                             Seu voto não poderá ser alterado
                         </p>
-                    <button class="btn btn-dark w-50" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Confirmar Voto</button>
+                    <form th:action="@{/votar/{opcaoId}(opcaoId=${opcao.getId()})}" method="post" >
+                        <button type="submit" class="btn btn-dark w-50">Confirmar Voto</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModalToggle2" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+    <div class="modal fade" id="modalSuccessToggle" aria-hidden="true" aria-labelledby="modalSuccessToggleLabel" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header justify-content-center bg-success">
                     <div class="w-100 text-center">
                         <i class="bi bi-check-circle fs-1 text-white"></i>
-                        <p class="modal-title fs-3 fw-semibold text-white" id="exampleModalToggleLabel2">Parabéns! Voto Confirmado!</p>
+                        <p class="modal-title fs-3 fw-semibold text-white" id="modalSuccessToggleLabel">Parabéns! Voto Confirmado!</p>
                     </div>
                 </div>
                 <div class="modal-body text-center">
@@ -59,4 +80,51 @@
         </div>
     </div>
 
+    <div class="modal fade" th:id="'modalEdit' + ${opcao.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditDropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditDropLabel">Editar empresa</h5>
+                </div>
+                <div class="modal-body">
+
+                    <form th:action="@{/update/{id}(id=${opcao.getId()})}" method="post">
+                        <div class="mb-3">
+                            <label for="nameEdit" class="form-label">Nome da Empresa</label>
+                            <input required minlength="3" type="text" name="nome" class="form-control" id="nameEdit" placeholder="Insira o nome da empresa" aria-describedby="Name Edit">
+                        </div>
+                        <div class="form-group">
+                            <label for="logoEdit">Insira a Logo da Empresa</label>
+                            <input type="file"
+                                   class="form-control-file mt-2"
+                                   id="logoEdit"
+                                   accept=".jpg, .jpeg, .png"
+                                   name="Imagem da empresa">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Editar</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" th:id="'modalDelete' + ${opcao.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header fs-3">
+                    Deseja realmente excluir esta opção ?
+                </div>
+                <div class="modal-footer">
+                    <form th:action="@{/delete/{id}(id=${opcao.getId()})}" method="post">
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+</html>

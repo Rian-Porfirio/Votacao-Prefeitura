@@ -1,21 +1,26 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
+import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.domain.Opcao;
-import br.com.rianporfirio.sistemavotacao.dto.FuncionarioResponse;
 import br.com.rianporfirio.sistemavotacao.dto.OpcaoDto;
+import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IOpcaoRepository;
 import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class OpcaoService {
 
     private final IOpcaoRepository opcaoRepository;
+    private final IFuncionarioRepository funcionarioRepository;
 
-    public OpcaoService(IOpcaoRepository opcaoRepository) {
+    public OpcaoService(IOpcaoRepository opcaoRepository, IFuncionarioRepository funcionarioRepository) {
         this.opcaoRepository = opcaoRepository;
+        this.funcionarioRepository = funcionarioRepository;
     }
 
     public void create(OpcaoDto dto) {
@@ -27,18 +32,21 @@ public class OpcaoService {
                 .orElseThrow(() -> new ValidationException("Opção não encontrada"));
     }
 
-    public List<FuncionarioResponse> getFuncionarios(long opcaoId) {
-        var funcionarios = getOpcao(opcaoId)
-                .getFuncionarios();
-        return funcionarios.stream().map(FuncionarioResponse::new).toList();
-    }
-
     public void delete(long opcaoId) {
-        opcaoRepository.deleteById(opcaoId);
-    }
+        try {
+            var funcionarioList = listFuncionarios(opcaoId);
 
-    public void deleteCascade(List<Long> opcoes) {
-        opcaoRepository.deleteAllById(opcoes);
+            for (var funcionario : funcionarioList) {
+                funcionario.setOpcao(null);
+            }
+
+            funcionarioRepository.saveAll(funcionarioList);
+
+            opcaoRepository.deleteById(opcaoId);
+            log.info("deletado com sucesso");
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+        }
     }
 
     public void update(OpcaoDto dto, long opcaoId) {
@@ -47,7 +55,11 @@ public class OpcaoService {
         opcaoRepository.save(opcao);
     }
 
-    public List<Opcao> findAll() {
+    public List<Opcao> getAll() {
         return opcaoRepository.findAll();
+    }
+
+    public List<Funcionario> listFuncionarios(long opcaoId) {
+        return getOpcao(opcaoId).getFuncionarios();
     }
 }

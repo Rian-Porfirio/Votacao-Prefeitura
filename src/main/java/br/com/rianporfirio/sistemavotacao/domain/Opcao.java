@@ -26,17 +26,8 @@ public class Opcao {
 
     private String nome;
 
-    @OneToMany(mappedBy = "opcao", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "opcao", fetch = FetchType.EAGER)
     private List<Funcionario> funcionarios;
 
-    @ManyToOne
-    private Votacao votacao;
-
-//    @Lob
-//    @Basic(fetch = FetchType.LAZY)
-//    private byte[] foto;
-
-    public List<Funcionario> getFuncionarios() {
-        return funcionarios;
-    }
+    private String filename;
 }

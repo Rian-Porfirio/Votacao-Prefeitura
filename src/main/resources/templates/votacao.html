@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout::layout(~{::content})}">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout::layout(~{::content})}"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
   <div th:fragment="content" class="h-100 d-flex justify-content-center align-items-center flex-column wipe-out-left">
 
     <div>
 
-      <div class="mb-2 d-flex gap-3">
-        <input th:if="${!#lists.isEmpty(opcoes)}" class="form-control mr-sm-2" type="search" placeholder="Pesquisar empresa" aria-label="Search">
-        <button type="button" class="btn btn-primary m-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-          <i class="bi bi-plus fs-5"></i>
-        </button>
+      <div class="mb-2">
+          <div th:if="${!#lists.isEmpty(opcoes)}" class="d-flex gap-1">
+            <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar empresa" aria-label="Search">
+            <button type="button" class="btn btn-primary m-auto" data-bs-toggle="modal" data-bs-target="#modalAddOption" sec:authorize="hasRole('ADMIN')">
+              <i class="bi bi-plus fs-5"></i>
+            </button>
+          </div>
       </div>
 
       <div class="container-padrao scrollbar-container">
 
         <div th:if="${#lists.isEmpty(opcoes)}" class="d-flex flex-column">
           <p class="text-center fw-semibold">Não há empresas cadastradas</p>
-          <button type="button" class="btn btn-primary w-25 m-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          <button type="button" class="btn btn-primary w-25 m-auto" data-bs-toggle="modal" data-bs-target="#modalAddOption" sec:authorize="hasRole('ADMIN')">
             <i class="bi bi-plus fs-5"></i>
           </button>
         </div>
@@ -27,34 +30,34 @@
         </div>
       </div>
 
-      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal fade" id="modalAddOption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddOptionDropLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              <h5 class="modal-title" id="modalAddOptionDropLabel">Adicionar empresa</h5>
             </div>
             <div class="modal-body">
 
-              <form>
+              <form th:action="@{/create}" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Nome da Empresa</label>
-                  <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Insira o nome da empresa" aria-describedby="emailHelp">
+                  <label for="nameModalAdd" class="form-label">Nome da Empresa</label>
+                  <input required minlength="3" type="text" name="nome" class="form-control" id="nameModalAdd" placeholder="Insira o nome da empresa" aria-describedby="Option Name">
                 </div>
                 <div class="form-group">
-                  <label for="exampleFormControlFile1">Insira a Logo da Empresa</label>
+                  <label for="imageAdd">Insira a Logo da Empresa</label>
                   <input type="file"
                          class="form-control-file mt-2"
-                         id="exampleFormControlFile1"
+                         id="imageAdd"
                          accept=".jpg, .jpeg, .png"
-                         name="Imagem da empresa">
+                         name="foto">
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Adicionar</button>
+                  <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
                 </div>
               </form>
 
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Adicionar</button>
-              </div>
             </div>
           </div>
         </div>

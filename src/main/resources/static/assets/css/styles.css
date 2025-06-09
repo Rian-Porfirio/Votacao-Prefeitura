@@ -4,7 +4,11 @@
     margin: 0;
 }
 
-body {
+.identity-background {
+    background-color: #ebf0f3;
+}
+
+#body-grid {
     display: grid;
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
@@ -14,15 +18,94 @@ body {
     height: 100vh;
 }
 
-nav {
-    grid-area: header;
+.body-top {
+    padding-top: 75px;
+}
+
+.form-wrapper {
+    padding: 15px;
+}
+
+.form-signin input[type="text"], input[type="password"] {
+    margin-bottom: 15px;
+}
+
+.link {
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: #337ab7;
+}
+
+.form-signin {
+    background: #ffffff;
+    border: #cccccc solid 1px;
+    border-radius: 5px;
+    box-shadow: 0 0 0.5em #bbb;
+    padding: 10px;
+    min-height: 205px;
+}
+
+.navbar-toggler {
+    color: white;
+}
+
+.navbar-brand-title {
+    color: #FFF;
+    padding-left: 5px;
+}
+
+.navbar-pje {
+    background: #0073c9;
+    color: #fff;
+}
+
+.form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
 }
 
 .nav-center {
     display: flex;
     width: 55vw;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+}
+
+#userNav {
+    display: flex;
+    justify-content: end;
+    gap: 0.6rem;
+    width: 270px;
+    max-width: 270px;
+    height: 45px;
+}
+
+#userNav span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: center;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.nav-icons {
+    font-size: 1.4rem;
+    font-weight: bolder;
+}
+
+#botoesOpcao {
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
 }
 
 main {
@@ -40,15 +123,28 @@ footer {
     gap: 15px;
 }
 
-.votacao {
-    background-color: #f1f1f1;
+.btn.btn-primary {
+    color: #fff;
+    background: #0079d5;
+}
+
+.btn.btn-primary,
+.btn.btn-danger{
+    border: 0px solid transparent;
+    box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.239216) 0px 1px 4px;
+    transition: all .4s ease-in-out;
+}
+
+.btn.btn-danger {
+    color: #fff;
+    background-color: #e53331;
 }
 
 .container-padrao {
     min-width: 350px;
     width: 35vw;
     height: 72vh;
-    box-shadow: 0 1px 9px 3px #00000029;
+    box-shadow: 0 3px 6px 3px #00000029;
     background-color: white;
     border-radius: 9px;
     padding: 15px;
@@ -62,6 +158,11 @@ footer {
     align-content: start;
 }
 
+#versionInfo {
+    color: rgba(0, 0, 0, 0.56);
+    font-family: sans-serif;
+}
+
 .scrollbar-container {
     overflow-y: auto;
     scrollbar-width: thin;
@@ -69,16 +170,10 @@ footer {
 }
 
 .opcao-imagem {
-    min-width: 90px;
-    height: 90px;
+    min-width: 120px;
+    height: 120px;
     border-radius: 9px;
     background-color: gray;
-}
-
-.navbar {
-    height: 70px;
-    padding-top: 0;
-    padding-bottom: 0;
 }
 
 @media (max-width: 512px) {
@@ -175,8 +270,16 @@ footer {
     }
 }
 
-.nav-link:hover, .nav-link:active {
-    box-shadow: 0 1px 0 0 black;
+@media (min-width: 768px) {
+    .navbar-expand-md {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+}
+
+nav {
+    display: block;
+    unicode-bidi: isolate;
 }
 
 #telaDeCarregamento {
@@ -211,4 +314,26 @@ footer {
     padding-right: 6px;
     font-size: 0.75rem;
     font-weight: bold;
+}
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f1f1f1;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 72vh;
+    width: 550px;
+    background-color: white;
+
+    box-shadow: 0 0 6px 6px #00000029;
+    border-radius: 12px;
+    padding: 20px;
 }

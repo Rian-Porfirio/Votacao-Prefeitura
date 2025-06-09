@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        #page-break {
+            page-break-before: always;
+        }
+
+        #option-header {
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        #option-header h2 {
+            float: left;
+        }
+
+        #option-header span {
+            float: right;
+        }
+
+        #option-header table tr {
+            border: none;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 10pt;
+            border: none;
+        }
+
+        th {
+            background-color: #0073c9;
+            color: white;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 3px;
+        }
+
+        #matricula {
+            width: 12%;
+        }
+
+        #servidor {
+            width: 44%;
+        }
+
+        #cargo {
+            width: 44%;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ebf0f3;
+        }
+
+        #votos-header {
+            text-align: right;
+            font-size: 0.9em;
+            font-weight: bold;
+            width: 20%;
+        }
+
+        #empresa-header {
+            text-align: left;
+            font-size: 0.9em;
+            font-weight: bold;
+            width: 80%
+        }
+
+        #empresa-header img,
+        #empresa-header p {
+            float: left;
+        }
+
+        #empresa-header p {
+            margin-top: 35px
+        }
+
+        #option-header table {
+            font-size: 14pt;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Relatório de Votos</h1>
+
+<div th:each="opcao : ${opcoes}">
+    <div id="page-break"></div>
+
+    <div id="option-header">
+        <table>
+            <tr>
+                <td id="empresa-header">
+                    <img src="src/main/resources/static/assets/images/brasao_itapura.png" width="90" height="90" alt="logo empresa"/>
+                    <p>
+                        <span th:text="${opcao.nome}"></span>
+                    </p>
+                </td>
+                <td id="votos-header" th:text="${opcao.getFuncionarios().size()} + ' Votos'"></td>
+            </tr>
+        </table>
+    </div>
+
+
+    <table>
+        <tr>
+            <th id="matricula">MATRÍCULA</th>
+            <th id="servidor">SERVIDOR</th>
+            <th id="cargo">CARGO/FUNÇÃO</th>
+        </tr>
+        <tr th:each="funcionario : ${opcao.funcionarios}">
+            <td th:text="${funcionario.getMatricula()}"></td>
+            <td th:text="${funcionario.nome}"></td>
+            <td th:text="${funcionario.getCargo()}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

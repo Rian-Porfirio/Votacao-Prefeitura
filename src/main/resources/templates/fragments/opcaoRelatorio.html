@@ -1,0 +1,15 @@
+<div class="card d-flex flex-column" style="width: 18rem;" th:fragment="opcao(opcao)">
+  <img th:src="@{/assets/images/brasao_itapura.png}" class="card-img-top" alt="logo empresa">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <h5 class="card-title" th:text="${opcao.nome}">Empresa</h5>
+      <div class="votos-widget">
+        <span th:text="${opcao.getFuncionarios().size()} + 'votos'"></span>
+      </div>
+    </div>
+    <p class="card-text">Para gerar um relatório sobre o desempenho de votos da empresa, selecione uma das opções de exportação</p>
+    <form th:action="@{/relatorio/unico/{opcaoId}(opcaoId=${opcao.getId()})}" method="get">
+      <button type="submit" class="btn btn-primary">Exportar Relatório</button>
+    </form>
+  </div>
+</div>

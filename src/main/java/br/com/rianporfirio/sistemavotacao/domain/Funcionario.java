@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class Funcionario implements UserDetails {
     private long id;
 
     private String matricula;
+    private String senha;
     private String nome;
     private String vinculo;
     private String lotacao;
@@ -35,19 +37,23 @@ public class Funcionario implements UserDetails {
     @ManyToOne
     private Opcao opcao;
 
+    public void votar(Opcao opcao) {
+        setOpcao(opcao);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE_" + userType.name()));
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return senha;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return matricula;
     }
 
     @Override
@@ -70,67 +76,4 @@ public class Funcionario implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getVinculo() {
-        return vinculo;
-    }
-
-    public void setVinculo(String vinculo) {
-        this.vinculo = vinculo;
-    }
-
-    public String getLotacao() {
-        return lotacao;
-    }
-
-    public void setLotacao(String lotacao) {
-        this.lotacao = lotacao;
-    }
-
-    public String getLocalDeTrabalho() {
-        return localDeTrabalho;
-    }
-
-    public void setLocalDeTrabalho(String localDeTrabalho) {
-        this.localDeTrabalho = localDeTrabalho;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public Opcao getOpcao() {
-        return opcao;
-    }
-
-    public void setOpcao(Opcao opcao) {
-        this.opcao = opcao;
-    }
 }

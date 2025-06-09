@@ -1,10 +1,163 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" class="identity-background">
+<head th:replace="~{/fragments/head::head}">
 </head>
 <body>
+<nav class="navbar navbar-expand-md fixed-top navbar-pje">
+    <div class="container-fluid">
+        <div class="navbar-brand">
+            <span class="navbar-brand-title fw-semibold">Votação Vale de Alimentação</span>
+        </div>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarItens" aria-controls="navbarItens" aria-expanded="false" aria-label="Toggle Navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbarItens" class="collapse navbar-collapse justify-content-end">
+            <ul class="nav navbar-nav">
+                <li class="nav-item"><a href="#" class="nav-link text-white fw-semibold" data-bs-toggle="modal" data-bs-target="#comoacessar">Como acessar</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white fw-semibold" data-bs-toggle="modal" data-bs-target="#comovotar">Como votar</a></li>
+                <li class="nav-item"><a href="https://docs.google.com/forms/d/e/1FAIpQLSeI9V9e0J8E0MHXxaTuqLWQde1GskHPtz27NqZ9CLq2s5_PxQ/viewform?usp=sharing&ouid=115955605235531546440" target="_blank" class="nav-link text-white fw-semibold">Reportar problemas</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white fw-semibold" data-bs-toggle="modal" data-bs-target="#sobre">Sobre</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid body-top identity-background">
+    <div class="row">
+        <div class="col text-center">
+            <img th:src="@{/assets/images/brasao_itapura.png}" class="brasao" title="Prefeitura Municipal de Itapura" alt="brasao" width="150" height="150">
+            <p class="fs-3">Prefeitura Municipal de Itapura</p>
+            <p class="fs-6">Processo de votação dos servidores públicos</p>
+        </div>
+    </div>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3">
+            <div class="row">
+                <div class="col">
+                    <iframe id="customLoginInfo" class="custom-login-info" style="display: none"></iframe>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col pt-3">
+                    <div class="form-signin">
+                        <form id="loginForm" th:action="@{/login}" method="post">
+                            <div class="container form-wrapper">
+                                <div class="row pb-3">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <input tabindex="1" id="username" class="form-control" name="username" placeholder="Matrícula" type="text" autofocus >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <input tabindex="2" id="password" class="form-control" name="password" placeholder="Senha" type="password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-7">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#newPasswordModal" class="link">Solicitar nova senha</a>
+                                            </div>
+                                            <div class="col-md-5 text-end">
+                                                <input tabindex="3" class="btn btn-primary" name="login" type="submit" value="ENTRAR">
+                                                <input type="hidden" id="pjeoffice-code" name="pjeoffice-code" value="">
+                                                <input type="hidden" id="phrase" name="phrase" value="">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row pb-3 text-center">
+                                </div>
+                            </div>
+                        </form>
 
-</body>
+                        <div class="modal fade" id="newPasswordModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Solicitar nova senha</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="newPassForm" class="needs-validation" novalidate="">
+                                            <div class="mb-3">
+                                                <label for="login" class="form-label">CPF/CNPJ</label>
+                                                <input type="number" class="form-control" id="login" name="login" required="">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" required="">
+                                            </div>
+                                            <div class="row">
+                                                <div id="newPassInfo" class="col-md-8 new-password-message"></div>
+                                                <div class="col-md-4 text-end">
+                                                    <button type="submit" class="btn btn-primary">SOLICITAR</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="kc-info" class="">
+                        <div id="kc-info-wrapper" class="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col text-center pt-3 version">
+                    <span id="versionInfo" style="">Sistema Oficial</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="comoacessar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="comoacessarModalLabel">Como acessar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sobre" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="sobreModalLabel">Sobre</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="comovotar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="comovotarModalLabel">Como Votar</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="contactUsInfo" class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
 </html>
