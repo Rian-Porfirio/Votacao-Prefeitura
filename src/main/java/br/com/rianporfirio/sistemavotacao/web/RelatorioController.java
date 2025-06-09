@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/relatorio")
 public class RelatorioController {
 
     private final OpcaoService opcaoService;
@@ -21,26 +23,26 @@ public class RelatorioController {
         this.pdfGeneratorService = pdfGeneratorService;
     }
 
-    @GetMapping("/relatorio")
+    @GetMapping()
     public String relatorio(Model model) {
         model.addAttribute("opcoes", opcaoService.getAll());
 
         return "relatorio";
     }
 
-    @GetMapping("/relatorio/geral")
+    @GetMapping("/geral")
     public ResponseEntity<byte[]> gerarRelatorioGeral() {
         byte[] pdfBytes = pdfGeneratorService.exportAll();
         return getExportPdfResponse(pdfBytes);
     }
 
-    @GetMapping("/relatorio/unico/{optionId}")
+    @GetMapping("/unico/{optionId}")
     public ResponseEntity<byte[]> gerarRelatorioUnico(@PathVariable long optionId) {
         byte[] pdfBytes = pdfGeneratorService.exportUnique(optionId);
         return getExportPdfResponse(pdfBytes);
     }
 
-    @GetMapping("/template/relatorio")
+    @GetMapping("/template")
     public String template(Model model) {
         model.addAttribute("opcoes", opcaoService.getAll());
         return "pdf_template";
