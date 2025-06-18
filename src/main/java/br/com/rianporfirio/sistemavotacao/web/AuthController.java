@@ -25,7 +25,6 @@ public class AuthController {
     @PostMapping("/generate-password")
     public String generatePassword() {
         String message = "Aqui está sua senha: " + passwordGenerationService.randomPassword();
-        mailSenderService.sendMail("rikson.tavares@gmail.com", message);
 
         return "login";
     }
