@@ -20,6 +20,11 @@ public class Opcao {
         setNome(dto.nome());
     }
 
+    public Opcao(String nome, String filePath) {
+        this.nome = nome;
+        this.filePath = filePath;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,5 +34,5 @@ public class Opcao {
     @OneToMany(mappedBy = "opcao", fetch = FetchType.EAGER)
     private List<Funcionario> funcionarios;
 
-    private String filename;
+    private String filePath;
 }
