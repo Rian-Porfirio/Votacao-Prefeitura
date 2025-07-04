@@ -3,7 +3,7 @@
 <div class="card mb-3" th:fragment="opcaoContainer(opcao)">
     <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center text-center text-md-start" >
         <div class="opcao-imagem">
-            <img src="" width="150">
+            <img th:src="@{${opcao.getFilePath()}}" style="width: 100px; height: auto;">
         </div>
         <div class="mb-3 mb-md-0 px-md-3">
             <h5 class="card-title text-break fs-5" th:text="${opcao.nome}">Nome da Opcao</h5>
@@ -88,7 +88,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <form th:action="@{/update/{id}(id=${opcao.getId()})}" method="post">
+                    <form th:action="@{/update/{id}(id=${opcao.getId()})}" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="nameEdit" class="form-label">Nome da Empresa</label>
                             <input required minlength="3" type="text" name="nome" class="form-control" id="nameEdit" placeholder="Insira o nome da empresa" aria-describedby="Name Edit">
@@ -99,7 +99,7 @@
                                    class="form-control-file mt-2"
                                    id="logoEdit"
                                    accept=".jpg, .jpeg, .png"
-                                   name="Imagem da empresa">
+                                   name="foto">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Editar</button>
