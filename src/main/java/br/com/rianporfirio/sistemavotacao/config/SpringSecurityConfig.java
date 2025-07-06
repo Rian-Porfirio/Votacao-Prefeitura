@@ -1,12 +1,12 @@
 package br.com.rianporfirio.sistemavotacao.config;
 
-import br.com.rianporfirio.sistemavotacao.service.FuncionarioDetailsService;
+import br.com.rianporfirio.sistemavotacao.service.AuthenticationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -14,21 +14,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
-    private final FuncionarioDetailsService funcionarioDetailsService;
+    private final AuthenticationService authenticationService;
 
-    public SpringSecurityConfig(FuncionarioDetailsService funcionarioDetailsService) {
-        this.funcionarioDetailsService = funcionarioDetailsService;
+    public SpringSecurityConfig(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
     @Bean
     public SecurityFilterChain web(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/generate-password").permitAll()
                         .requestMatchers(
                                 "/relatorio",
                                 "/relatorio/geral",
                                 "/relatorio/unico/*",
+                                "/generate/password",
                                 "update/*",
                                 "delete/*",
                                 "create").hasRole("ADMIN")
@@ -43,13 +43,13 @@ public class SpringSecurityConfig {
                         .permitAll()
                         .logoutSuccessUrl("/login")
                 )
-                .userDetailsService(funcionarioDetailsService)
+                .userDetailsService(authenticationService)
                 .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
