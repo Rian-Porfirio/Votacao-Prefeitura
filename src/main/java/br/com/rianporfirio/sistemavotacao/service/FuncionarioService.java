@@ -2,8 +2,10 @@ package br.com.rianporfirio.sistemavotacao.service;
 
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IOpcaoRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class FuncionarioService {
 
