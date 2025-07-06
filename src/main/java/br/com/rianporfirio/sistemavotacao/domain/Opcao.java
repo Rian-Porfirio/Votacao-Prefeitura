@@ -29,10 +29,11 @@ public class Opcao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String filePath;
     private String nome;
+    private String cnpj;
 
     @OneToMany(mappedBy = "opcao", fetch = FetchType.EAGER)
     private List<Funcionario> funcionarios;
 
-    private String filePath;
 }
