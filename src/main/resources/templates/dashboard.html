@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="br" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{fragments/head}">
+</head>
+<body class="dashboard">
+    <div class="navbar__container">
+        <div class="navbar__header">
+            <img class="navbar__image" th:src="@{/assets/images/brasao_itapura.png}" alt="brasão">
+            <span class="navbar__title">Administração</span>
+        </div>
+        <div class="navbar__navigation">
+            <a href="/dashboard"
+               class="navbar__button navbar__button--hover"
+               th:classappend="${currentPath == '/dashboard'} ? ' navbar__button--active' : ''"
+               aria-label="Empresas">
+                <i class="bi bi-building-fill"></i>Empresas
+            </a>
+            <a href="/dashboard/usuarios"
+               class="navbar__button navbar__button--hover"
+               th:classappend="${currentPath.contains('usuarios')} ? ' navbar__button--active' : ''"
+               aria-label="Usuários">
+                <i class="bi bi-people-fill"></i>Usuários
+            </a>
+            <a href="/dashboard/votacao"
+               class="navbar__button navbar__button--hover"
+               th:classappend="${currentPath.contains('votacao')} ? ' navbar__button--active' : ''"
+               aria-label="Votação">
+                <i class="bi bi-clipboard-data-fill"></i>Votação
+            </a>
+            <a href="/dashboard/atividades"
+               class="navbar__button navbar__button--hover"
+               th:classappend="${currentPath.contains('atividades')} ? ' navbar__button--active' : ''"
+               aria-label="Atividade">
+                <i class="bi bi-heart-pulse-fill"></i>Atividade
+            </a>
+            <a href="/dashboard/ajuda"
+               class="navbar__button navbar__button--hover"
+               th:classappend="${currentPath.contains('ajuda')} ? ' navbar__button--active' : ''"
+               aria-label="Ajuda">
+                <i class="bi bi-info-circle-fill"></i>Ajuda
+            </a>
+        </div>
+        <div class="navbar__system-actions">
+            <a href="/" class="navbar__button navbar__button--action"><i class="bi bi-house-door"></i>Home</a>
+            <form th:action="@{/logout}" method="post">
+                <button class="navbar__button navbar__button--action"><i class="bi bi-box-arrow-left"></i>Log out</button>
+            </form>
+        </div>
+    </div>
+
+    <main layout:fragment="content" class="dashboard__content">
+    </main>
+</body>
+</html>
