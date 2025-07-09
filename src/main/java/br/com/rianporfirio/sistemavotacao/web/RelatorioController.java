@@ -1,6 +1,6 @@
 package br.com.rianporfirio.sistemavotacao.web;
 
-import br.com.rianporfirio.sistemavotacao.service.OpcaoService;
+import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import br.com.rianporfirio.sistemavotacao.service.PDFGeneratorService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/relatorio")
 public class RelatorioController {
 
-    private final OpcaoService opcaoService;
+    private final EmpresaService empresaService;
     private final PDFGeneratorService pdfGeneratorService;
 
-    public RelatorioController(OpcaoService opcaoService, PDFGeneratorService pdfGeneratorService) {
-        this.opcaoService = opcaoService;
+    public RelatorioController(EmpresaService empresaService, PDFGeneratorService pdfGeneratorService) {
+        this.empresaService = empresaService;
         this.pdfGeneratorService = pdfGeneratorService;
     }
 
     @GetMapping()
     public String relatorio(Model model) {
-        model.addAttribute("opcoes", opcaoService.getAll());
+        model.addAttribute("opcoes", empresaService.getAll());
 
         return "relatorio";
     }
@@ -36,15 +36,15 @@ public class RelatorioController {
         return getExportPdfResponse(pdfBytes);
     }
 
-    @GetMapping("/unico/{optionId}")
-    public ResponseEntity<byte[]> gerarRelatorioUnico(@PathVariable long optionId) {
-        byte[] pdfBytes = pdfGeneratorService.exportUnique(optionId);
+    @GetMapping("/unico/{empresaId}")
+    public ResponseEntity<byte[]> gerarRelatorioUnico(@PathVariable long empresaId) {
+        byte[] pdfBytes = pdfGeneratorService.exportUnique(empresaId);
         return getExportPdfResponse(pdfBytes);
     }
 
     @GetMapping("/template")
     public String template(Model model) {
-        model.addAttribute("opcoes", opcaoService.getAll());
+        model.addAttribute("opcoes", empresaService.getAll());
         return "pdf_template";
     }
 

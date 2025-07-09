@@ -24,8 +24,8 @@
         </div>
 
         <div th:if="${!#lists.isEmpty(opcoes)}">
-          <div th:each="opcao : ${opcoes}">
-            <div th:replace="~{fragments/opcoes::opcaoContainer(${opcao})}"></div>
+          <div th:each="empresa : ${opcoes}">
+            <div th:replace="~{fragments/opcoes::opcaoContainer(${empresa})}"></div>
           </div>
         </div>
       </div>

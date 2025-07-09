@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="br" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head th:replace="~{fragments/head}">
+<head th:replace="~{fragments/head::head}">
 </head>
 <body class="dashboard">
     <div class="navbar__container">
@@ -9,9 +9,9 @@
             <span class="navbar__title">Administração</span>
         </div>
         <div class="navbar__navigation">
-            <a href="/dashboard"
+            <a href="/dashboard/empresas"
                class="navbar__button navbar__button--hover"
-               th:classappend="${currentPath == '/dashboard'} ? ' navbar__button--active' : ''"
+               th:classappend="${currentPath.contains('empresas')} ? ' navbar__button--active' : ''"
                aria-label="Empresas">
                 <i class="bi bi-building-fill"></i>Empresas
             </a>

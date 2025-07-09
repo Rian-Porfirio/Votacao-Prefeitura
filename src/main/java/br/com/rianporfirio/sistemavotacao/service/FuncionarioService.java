@@ -1,7 +1,7 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
-import br.com.rianporfirio.sistemavotacao.repository.IOpcaoRepository;
+import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 public class FuncionarioService {
 
     private final IFuncionarioRepository funcionarioRepository;
-    private final IOpcaoRepository opcaoRepository;
+    private final IEmpresaRepository opcaoRepository;
 
-    public FuncionarioService(IFuncionarioRepository funcionarioRepository, IOpcaoRepository opcaoRepository) {
+    public FuncionarioService(IFuncionarioRepository funcionarioRepository, IEmpresaRepository opcaoRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.opcaoRepository = opcaoRepository;
     }

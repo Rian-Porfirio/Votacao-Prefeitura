@@ -29,9 +29,10 @@ public class SpringSecurityConfig {
                                 "/relatorio/geral",
                                 "/relatorio/unico/*",
                                 "/generate/password",
-                                "update/*",
-                                "delete/*",
-                                "create").hasRole("ADMIN")
+                                "/update/*",
+                                "/delete/*",
+                                "/create",
+                                "/dashboard/*").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

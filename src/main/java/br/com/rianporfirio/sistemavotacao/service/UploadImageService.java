@@ -22,7 +22,7 @@ public class UploadImageService {
     private final String logosFolder = "uploads/logos";
     private final Set<String> allowedMimeTypes = Set.of("image/png", "image/jpeg", "image/jpg");
 
-    public String uploadLogo(MultipartFile file, String optionName) throws IOException {
+    public String uploadLogo(MultipartFile file, String name) throws IOException {
         if (file.isEmpty()) {
             throw new FileUploadException("Arquivo de imagem não inserido");
         }
@@ -31,7 +31,7 @@ public class UploadImageService {
             throw new InvalidContentTypeException("Arquivo não permitido");
         }
 
-        Path uploadPath = Paths.get(logosFolder, optionName);
+        Path uploadPath = Paths.get(logosFolder, name);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -40,11 +40,11 @@ public class UploadImageService {
         Path completePath = uploadPath.resolve(filename);
         file.transferTo(completePath);
 
-        return "/logos/" + optionName + "/" + filename;
+        return "/logos/" + name + "/" + filename;
     }
 
-    public void deleteDirectory(String optionName) throws IOException {
-        Path deletePath = Paths.get(logosFolder, optionName);
+    public void deleteDirectory(String name) throws IOException {
+        Path deletePath = Paths.get(logosFolder, name);
 
         if (!Files.exists(deletePath)) {
             log.debug("Diretório '{}' não encontrado", deletePath);

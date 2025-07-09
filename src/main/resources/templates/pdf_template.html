@@ -8,7 +8,7 @@
 
 <h1>Relatório de Votos</h1>
 
-<div th:each="opcao : ${opcoes}">
+<div th:each="empresa : ${opcoes}">
     <div id="page-break"></div>
 
     <div id="option-header">
@@ -17,10 +17,10 @@
                 <td id="empresa-header">
                     <img src="src/main/resources/static/assets/images/brasao_itapura.png" width="90" height="90" alt="logo empresa"/>
                     <p>
-                        <span th:text="${opcao.nome}"></span>
+                        <span th:text="${empresa.nome}"></span>
                     </p>
                 </td>
-                <td id="votos-header" th:text="${opcao.getFuncionarios().size()} + ' Votos'"></td>
+                <td id="votos-header" th:text="${empresa.getFuncionarios().size()} + ' Votos'"></td>
             </tr>
         </table>
     </div>
@@ -31,7 +31,7 @@
             <th id="servidor">SERVIDOR</th>
             <th id="cargo">CARGO/FUNÇÃO</th>
         </tr>
-        <tr th:each="funcionario : ${opcao.funcionarios}">
+        <tr th:each="funcionario : ${empresa.funcionarios}">
             <td th:text="${funcionario.getMatricula()}"></td>
             <td th:text="${funcionario.nome}"></td>
             <td th:text="${funcionario.getCargo()}"></td>

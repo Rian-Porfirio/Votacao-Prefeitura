@@ -8,7 +8,7 @@
         <div class="dataTable__header">
             <div class="dataTable__left-content">
                 <span>Lista de Empresas</span>
-                <form method="get" th:action="@{/dashboard}">
+                <form method="get" th:action="@{/dashboard/empresas}">
                     <input class="form-control" type="search" placeholder="Pesquisar empresa" aria-label="Search" name="search" th:value="${search}">
                 </form>
             </div>
