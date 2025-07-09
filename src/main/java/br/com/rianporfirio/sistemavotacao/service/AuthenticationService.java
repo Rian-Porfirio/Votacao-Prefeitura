@@ -9,14 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class FuncionarioDetailsService implements UserDetailsService {
+public class AuthenticationService implements UserDetailsService {
 
     private final IFuncionarioRepository funcionarioRepository;
-    private final PasswordGenerationService passwordGeneration;
 
-    public FuncionarioDetailsService(IFuncionarioRepository funcionarioRepository, PasswordGenerationService passwordGeneration) {
+    public AuthenticationService(IFuncionarioRepository funcionarioRepository) {
         this.funcionarioRepository = funcionarioRepository;
-        this.passwordGeneration = passwordGeneration;
     }
 
     @Override

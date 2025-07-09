@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{dashboard}" lang="br">
+<body>
+<main layout:fragment="content">
+    <div class="dataTable__container">
+        <div class="dataTable__header">
+            <div class="dataTable__left-content">
+                <span>Lista de Empresas</span>
+                <form method="get" th:action="@{/dashboard/empresas}">
+                    <input class="form-control" type="search" placeholder="Pesquisar empresa" aria-label="Search" name="search" th:value="${search}">
+                </form>
+            </div>
+            <div class="dataTable__right-content">
+                <span>Mostrar <i class="bi bi-caret-down"></i></span>
+                <span>Filtrar <i class="bi bi-filter"></i></span>
+                <div>
+                    <button type="button" class="dataTable__button" data-bs-toggle="modal" data-bs-target="#modalAddOption">
+                        + Nova Empresa
+                    </button>
+                </div>
+                <div>
+                    <button class="dataTable__button">Exportar</button>
+                </div>
+            </div>
+        </div>
+        <table class="dataTable">
+            <thead class="dataTable__thead">
+            <tr>
+                <th>Logo</th>
+                <th style="width: 40%">Nome</th>
+                <th>CNPJ</th>
+                <th>Status</th>
+                <th style="width: 6%">Ações</th>
+            </tr>
+            </thead>
+            <tbody class="dataTable__body">
+            <tr th:each="empresa : ${empresas}">
+                <td>
+                    <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
+                </td>
+                <td th:text="${empresa.nome}"></td>
+                <td th:text="${empresa.cnpj}"></td>
+                <td>
+                    <div th:if="${empresa.isAtivo()}" class="dataTable__status dataTable__status--true">Ativo</div>
+                    <div th:if="${!empresa.isAtivo()}" class="dataTable__status dataTable__status--false">Inativo</div>
+                </td>
+                <td>
+                    <div class="dataTable__actions">
+                        <form method="post" th:action="@{/status/change/{id}(id=${empresa.getId()})}">
+                            <button type="submit" class="dataTable__action-button">
+                                <i th:if="${empresa.isAtivo()}" class="bi bi-ban"></i>
+                                <i th:if="${!empresa.isAtivo()}" class="bi bi-check2"></i>
+                            </button>
+                        </form>
+                        <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalEdit' + ${empresa.getId()}">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalDelete' + ${empresa.getId()}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:each="empresa : ${empresas}">
+        <div class="modal fade" th:id="'modalDelete' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fs-3">
+                        Deseja realmente excluir esta opção ?
+                    </div>
+                    <div class="modal-footer">
+                        <form th:action="@{/delete/{id}(id=${empresa.getId()})}" method="post">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" th:id="'modalEdit' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditDropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditDropLabel">Editar empresa</h5>
+                    </div>
+                    <div class="modal-body">
+
+                        <form th:action="@{/update/{id}(id=${empresa.getId()})}" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="nameEdit" class="form-label">Nome da Empresa</label>
+                                <input required minlength="3" type="text" name="nome" class="form-control" id="nameEdit" placeholder="Insira o nome da empresa" aria-describedby="Name Edit">
+                            </div>
+                            <div class="form-group">
+                                <label for="logoEdit">Insira a Logo da Empresa</label>
+                                <input type="file"
+                                       class="form-control-file mt-2"
+                                       id="logoEdit"
+                                       accept=".jpg, .jpeg, .png"
+                                       name="foto">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Editar</button>
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddOption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddOptionDropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAddOptionDropLabel">Adicionar empresa</h5>
+                </div>
+                <div class="modal-body">
+
+                    <form th:action="@{/create}" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="nameModalAdd" class="form-label">Nome da Empresa</label>
+                            <input required minlength="3" type="text" name="nome" class="form-control" id="nameModalAdd" placeholder="Insira o nome da empresa" aria-describedby="Option Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="imageAdd">Insira a Logo da Empresa</label>
+                            <input type="file"
+                                   class="form-control-file mt-2"
+                                   id="imageAdd"
+                                   accept=".jpg, .jpeg, .png"
+                                   name="foto">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Adicionar</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

@@ -1,6 +1,6 @@
 package br.com.rianporfirio.sistemavotacao.domain;
 
-import br.com.rianporfirio.sistemavotacao.dto.OpcaoDto;
+import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,13 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Opcao {
+public class Empresa {
 
-    public Opcao(OpcaoDto dto) {
+    public Empresa(EmpresaDto dto) {
         setNome(dto.nome());
     }
 
-    public Opcao(String nome, String filePath) {
+    public Empresa(String nome, String filePath) {
         this.nome = nome;
         this.filePath = filePath;
     }
@@ -29,10 +29,12 @@ public class Opcao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String filePath;
     private String nome;
+    private String cnpj;
+    private boolean ativo;
 
-    @OneToMany(mappedBy = "opcao", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)
     private List<Funcionario> funcionarios;
 
-    private String filePath;
 }

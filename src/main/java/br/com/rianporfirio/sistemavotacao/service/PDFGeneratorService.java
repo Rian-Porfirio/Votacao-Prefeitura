@@ -1,7 +1,7 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
-import br.com.rianporfirio.sistemavotacao.domain.Opcao;
-import br.com.rianporfirio.sistemavotacao.repository.IOpcaoRepository;
+import br.com.rianporfirio.sistemavotacao.domain.Empresa;
+import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -18,13 +18,13 @@ import java.util.List;
 @Service
 public class PDFGeneratorService {
 
-    private final IOpcaoRepository repository;
+    private final IEmpresaRepository repository;
 
-    public PDFGeneratorService(IOpcaoRepository repository) {
+    public PDFGeneratorService(IEmpresaRepository repository) {
         this.repository = repository;
     }
 
-    private String parseThymeleafTemplate(List<Opcao> opcoes) {
+    private String parseThymeleafTemplate(List<Empresa> opcoes) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("/templates/");
         templateResolver.setSuffix(".html");
@@ -61,8 +61,8 @@ public class PDFGeneratorService {
         return generatePdf(html);
     }
 
-    public byte[] exportUnique(long optionId) {
-        var opcao = repository.findById(optionId).stream().toList();
+    public byte[] exportUnique(long empresaId) {
+        var opcao = repository.findById(empresaId).stream().toList();
         String html = parseThymeleafTemplate(opcao);
 
         return generatePdf(html);

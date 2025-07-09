@@ -3,6 +3,7 @@ import br.com.rianporfirio.sistemavotacao.service.MailSenderService;
 import br.com.rianporfirio.sistemavotacao.service.PasswordGenerationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AuthController {
 
     private final MailSenderService mailSenderService;
-    private final PasswordGenerationService passwordGenerationService;
+    private final PasswordGenerationService passwordGenerator;
 
-    public AuthController(MailSenderService mailSenderService, PasswordGenerationService passwordGenerationService) {
+    public AuthController(MailSenderService mailSenderService, PasswordGenerationService passwordGenerator) {
         this.mailSenderService = mailSenderService;
-        this.passwordGenerationService = passwordGenerationService;
+        this.passwordGenerator = passwordGenerator;
     }
 
     @GetMapping("/login")
@@ -22,10 +23,8 @@ public class AuthController {
         return "login";
     }
 
-    @PostMapping("/generate-password")
-    public String generatePassword() {
-        String message = "Aqui está sua senha: " + passwordGenerationService.randomPassword();
-
-        return "login";
+    @PostMapping("/generate/password")
+    public void generatePassword(@ModelAttribute("matriculaSenha") String matricula) {
+        passwordGenerator.generatePassword(matricula);
     }
 }

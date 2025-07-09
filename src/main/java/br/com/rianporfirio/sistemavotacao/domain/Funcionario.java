@@ -35,10 +35,10 @@ public class Funcionario implements UserDetails {
     private UserType userType;
 
     @ManyToOne
-    private Opcao opcao;
+    private Empresa empresa;
 
-    public void votar(Opcao opcao) {
-        setOpcao(opcao);
+    public void votar(Empresa empresa) {
+        setEmpresa(empresa);
     }
 
     @Override
