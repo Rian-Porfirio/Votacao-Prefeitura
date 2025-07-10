@@ -22,6 +22,11 @@ public class DashboardController {
         this.empresaService = empresaService;
     }
 
+    @GetMapping("/**")
+    public String defaultRedirect() {
+        return "redirect:/dashboard/empresas";
+    }
+
     @GetMapping("/empresas")
     public String enterprises(Model model, HttpServletRequest req, @RequestParam(value = "search", required = false) String search) {
         getCurrentPath(model, req);

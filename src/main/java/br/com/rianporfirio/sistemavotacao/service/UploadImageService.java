@@ -23,10 +23,6 @@ public class UploadImageService {
     private final Set<String> allowedMimeTypes = Set.of("image/png", "image/jpeg", "image/jpg");
 
     public String uploadLogo(MultipartFile file, String name) throws IOException {
-        if (file.isEmpty()) {
-            throw new FileUploadException("Arquivo de imagem não inserido");
-        }
-
         if (!allowedMimeTypes.contains(file.getContentType())) {
             throw new InvalidContentTypeException("Arquivo não permitido");
         }

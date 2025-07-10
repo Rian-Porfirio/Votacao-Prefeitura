@@ -23,9 +23,9 @@ public class EmpresasController {
     }
 
     @PostMapping("/create")
-    public String createEmpresa(@ModelAttribute("nome") String nome, @RequestParam("foto") MultipartFile foto) {
+    public String createEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto) {
         try {
-            empresaService.create(new EmpresaDto(nome), foto);
+            empresaService.create(empresaDto, foto);
         } catch (Exception ex) {
             log.error("não foi possível inserir uma nova empresa no sistema. Motivo: {}", ex.getMessage());
         }
@@ -33,9 +33,9 @@ public class EmpresasController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateEmpresa(@ModelAttribute("nome") String nome, @RequestParam("foto") MultipartFile foto, @PathVariable long id) {
+    public String updateEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto, @PathVariable long id) {
         try {
-            empresaService.update(new EmpresaDto(nome), id, foto);
+            empresaService.update(empresaDto, id, foto);
         } catch (Exception ex) {
             log.error("não foi possível atualizar a empresa. Motivo: {}", ex.getMessage());
         }
