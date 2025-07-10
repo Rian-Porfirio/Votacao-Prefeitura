@@ -1,13 +1,9 @@
 package br.com.rianporfirio.sistemavotacao.web;
 
 import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
-import br.com.rianporfirio.sistemavotacao.service.FuncionarioService;
 import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
