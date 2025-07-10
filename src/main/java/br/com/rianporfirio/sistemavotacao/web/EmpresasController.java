@@ -1,13 +1,9 @@
 package br.com.rianporfirio.sistemavotacao.web;
 
 import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
-import br.com.rianporfirio.sistemavotacao.service.FuncionarioService;
 import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +19,9 @@ public class EmpresasController {
     }
 
     @PostMapping("/create")
-    public String createEmpresa(@ModelAttribute("nome") String nome, @RequestParam("foto") MultipartFile foto) {
+    public String createEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto) {
         try {
-            empresaService.create(new EmpresaDto(nome), foto);
+            empresaService.create(empresaDto, foto);
         } catch (Exception ex) {
             log.error("não foi possível inserir uma nova empresa no sistema. Motivo: {}", ex.getMessage());
         }
@@ -33,9 +29,9 @@ public class EmpresasController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateEmpresa(@ModelAttribute("nome") String nome, @RequestParam("foto") MultipartFile foto, @PathVariable long id) {
+    public String updateEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto, @PathVariable long id) {
         try {
-            empresaService.update(new EmpresaDto(nome), id, foto);
+            empresaService.update(empresaDto, id, foto);
         } catch (Exception ex) {
             log.error("não foi possível atualizar a empresa. Motivo: {}", ex.getMessage());
         }

@@ -20,8 +20,10 @@ public class Empresa {
         setNome(dto.nome());
     }
 
-    public Empresa(String nome, String filePath) {
+    public Empresa(String filePath, String nome, String cnpj, String descricao) {
         this.nome = nome;
+        this.cnpj = cnpj;
+        this.descricao = descricao;
         this.filePath = filePath;
     }
 
@@ -32,6 +34,7 @@ public class Empresa {
     private String filePath;
     private String nome;
     private String cnpj;
+    private String descricao;
     private boolean ativo;
 
     @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)

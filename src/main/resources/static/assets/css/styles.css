@@ -15,6 +15,7 @@
     --branco-padrao: #fff;
     --branco-padrao-80: #FFFFFFCC;
     --branco-variante-II: #DFE3E8;
+    --branco-variante-III: #ced4da;
     --fonte-verde-80: #004E00;
     --container-verde-85: #A8FFB8;
     --fonte-vermelho-escuro: #4E0000;
@@ -147,8 +148,8 @@ footer {
 
 .btn.btn-primary,
 .btn.btn-danger{
-    border: 0px solid transparent;
-    box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.239216) 0px 1px 4px;
+    border: 0 solid transparent;
+    box-shadow: rgba(0, 0, 0, 0.117647) 0 1px 6px, rgba(0, 0, 0, 0.239216) 0 1px 4px;
     transition: all .4s ease-in-out;
 }
 
@@ -583,4 +584,156 @@ nav {
 .dataTable__status--true {
     color: var(--fonte-verde-80);
     background-color: var(--container-verde-85);
+}
+
+.modalEmpresa__content {
+    display: flex;
+    height: 100%;
+}
+
+.modalEmpresa__formulario-container {
+    flex: 1;
+    padding: 30px 30px 10px 30px;
+}
+
+.modalEmpresa__formulario-container div {
+    margin-bottom: 1.5rem;
+}
+
+.modalEmpresa__file-label {
+    font-size: 0.7rem;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
+    padding: 20px 0;
+}
+
+.modalEmpresa__file-upload b {
+    color: var(--azul-prefeitura);
+}
+
+.modalEmpresa__file-upload {
+    border: 1px solid var(--branco-variante-III);
+    border-radius: 12px;
+    cursor: pointer;
+    height: 75px;
+}
+
+.modalEmpresa__button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5rem;
+    margin-top: 2.5rem;
+}
+
+.modalEmpresa__button {
+    flex: 1;
+    height: 40px;
+    border-radius: 9px;
+    transition: ease-in-out 0.1s;
+}
+
+.modalEmpresa__button:active {
+    transform: scale(0.95);
+}
+
+.modalEmpresa__button-cancelar {
+    font-weight: bold;
+    color: var(--preto-padrao);
+    background-color: var(--branco-padrao);
+    border: 1px solid var(--preto-padrao-50);
+}
+
+.modalEmpresa__button-confirmar {
+    background-color: var(--azul-prefeitura);
+    color: var(--branco-padrao-80);
+    border: none;
+}
+
+.modalEmpresa__button-confirmar:hover {
+    color: var(--branco-padrao);
+}
+
+.modalEmpresa__preview-container {
+    flex: 1;
+    background-color: var(--cor-de-fundo);
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.modalEmpresa__preview-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.modalEmpresa__preview-card {
+    background-color: var(--branco-padrao);
+    height: 500px;
+    width: 350px;
+    border-radius: 24px;
+}
+
+.modalEmpresa__card-header {
+    background-color: var(--azul-prefeitura);
+    height: 45%;
+    border-radius: 24px 24px 0 0;
+}
+
+
+.modalEmpresa__card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px 30px;
+    height: 55%;
+}
+
+.modalEmpresa__card-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    scrollbar-width: thin;
+    gap: 1.5rem;
+}
+
+.modalEmpresa__card-info:hover {
+    overflow: auto;
+    scrollbar-width: thin;
+}
+
+.modalEmpresa__card-content span {
+    display: block;
+    word-break: break-word;
+    font-size: 0.88rem;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.modalEmpresa__card-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 24px 24px 0 0;
+    object-fit: cover;
+}
+
+.drag-over {
+    background-color: var(--preto-padrao-9);
+}
+
+.image-not-valid {
+    border: 1px solid var(--container-vermelho-75);
+}
+
+.error-message {
+    color: red;
+    font-size: 0.7rem;
+    font-weight: normal;
+}
+
+.modalEmpresaEdit div {
+    margin-bottom: 1.5rem;
 }
