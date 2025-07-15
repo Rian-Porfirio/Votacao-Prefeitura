@@ -2,70 +2,71 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{dashboard}" lang="br">
+<script layout:fragment="scripts" type="module" th:src="@{/assets/js/empresas/main.js}"></script>
 <body>
 <main layout:fragment="content">
-    <div class="dataTable__container">
-        <div class="dataTable__header">
-            <div class="dataTable__left-content">
-                <span>Lista de Empresas</span>
-                <form method="get" th:action="@{/dashboard/empresas}">
-                    <input class="form-control" type="search" placeholder="Pesquisar empresa" aria-label="Search" name="search" th:value="${search}">
-                </form>
-            </div>
-            <div class="dataTable__right-content">
-                <span>Mostrar <i class="bi bi-caret-down"></i></span>
-                <span>Filtrar <i class="bi bi-filter"></i></span>
-                <div>
-                    <button type="button" class="dataTable__button" data-bs-toggle="modal" data-bs-target="#modalAddOption">
-                        + Nova Empresa
-                    </button>
+        <div class="dataTable__container">
+            <div class="dataTable__header">
+                <div class="dataTable__left-content">
+                    <span>Lista de Empresas</span>
+                    <form method="get" th:action="@{/dashboard/empresas}">
+                        <input class="form-control" type="search" placeholder="Pesquisar Empresa" aria-label="Search" name="search" th:value="${search}">
+                    </form>
                 </div>
-                <div>
-                    <button class="dataTable__button">Exportar</button>
-                </div>
-            </div>
-        </div>
-        <table class="dataTable">
-            <thead class="dataTable__thead">
-            <tr>
-                <th>Logo</th>
-                <th style="width: 40%">Nome</th>
-                <th>CNPJ</th>
-                <th>Status</th>
-                <th style="width: 6%">Ações</th>
-            </tr>
-            </thead>
-            <tbody class="dataTable__body">
-            <tr th:each="empresa : ${empresas}">
-                <td>
-                    <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
-                </td>
-                <td th:text="${empresa.nome}"></td>
-                <td th:text="${empresa.cnpj}"></td>
-                <td>
-                    <div th:if="${empresa.isAtivo()}" class="dataTable__status dataTable__status--true">Ativo</div>
-                    <div th:if="${!empresa.isAtivo()}" class="dataTable__status dataTable__status--false">Inativo</div>
-                </td>
-                <td>
-                    <div class="dataTable__actions">
-                        <form method="post" th:action="@{/status/change/{id}(id=${empresa.getId()})}">
-                            <button type="submit" class="dataTable__action-button">
-                                <i th:if="${empresa.isAtivo()}" class="bi bi-ban"></i>
-                                <i th:if="${!empresa.isAtivo()}" class="bi bi-check2"></i>
-                            </button>
-                        </form>
-                        <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalEdit' + ${empresa.getId()}">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalDelete' + ${empresa.getId()}">
-                            <i class="bi bi-trash"></i>
+                <div class="dataTable__right-content">
+                    <span>Mostrar <i class="bi bi-caret-down"></i></span>
+                    <span>Filtrar <i class="bi bi-filter"></i></span>
+                    <div>
+                        <button type="button" class="dataTable__button" data-bs-toggle="modal" data-bs-target="#modalAddOption">
+                            + Nova Empresa
                         </button>
                     </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                    <div>
+                        <button class="dataTable__button">Exportar</button>
+                    </div>
+                </div>
+            </div>
+            <table class="dataTable">
+                <thead class="dataTable__thead">
+                <tr>
+                    <th>Logo</th>
+                    <th style="width: 20%;">Nome</th>
+                    <th>CNPJ</th>
+                    <th>Status</th>
+                    <th style="width: 10%"></th>
+                </tr>
+                </thead>
+                <tbody class="dataTable__body" id="tabelaEmpresas" style="max-height: 700px">
+                <tr th:each="empresa : ${empresas}">
+                    <td>
+                        <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
+                    </td>
+                    <td style="width: 20%; word-break: break-all;" th:text="${empresa.nome}"></td>
+                    <td th:text="${empresa.cnpj}"></td>
+                    <td>
+                        <div th:if="${empresa.isAtivo()}" class="dataTable__status dataTable__status--true">Ativo</div>
+                        <div th:if="${!empresa.isAtivo()}" class="dataTable__status dataTable__status--false">Inativo</div>
+                    </td>
+                    <td style="width: 10%">
+                        <div class="dataTable__actions">
+                            <form method="post" th:action="@{/status/change/{id}(id=${empresa.getId()})}">
+                                <button type="submit" class="dataTable__action-button">
+                                    <i th:if="${empresa.isAtivo()}" class="bi bi-ban"></i>
+                                    <i th:if="${!empresa.isAtivo()}" class="bi bi-check2"></i>
+                                </button>
+                            </form>
+                            <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalEdit' + ${empresa.getId()}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalDelete' + ${empresa.getId()}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
     <div th:each="empresa : ${empresas}">
         <div class="modal fade" th:id="'modalDelete' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
@@ -133,7 +134,7 @@
                 <div class="modal-body" style="padding: 0">
                         <div class="modalEmpresa__content">
                             <div class="modalEmpresa__formulario-container">
-                                <form th:action="@{/create}" method="post" enctype="multipart/form-data">
+                                <form th:action="@{/create}" method="post" enctype="multipart/form-data" id="formNovaEmpresa">
                                     <div>
                                         <label for="nameModalAdd" class="form-label">Nome da Empresa *</label>
                                         <input required minlength="3" type="text" name="nome" class="form-control" id="nameModalAdd" placeholder="Insira o nome da empresa" aria-describedby="nome empresa">

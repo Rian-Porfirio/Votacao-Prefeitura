@@ -29,7 +29,7 @@ public class PasswordGenerationService {
         String encodedPassword = encodePassword(rawPassword);
         setEncodedPassword(matricula, encodedPassword);
 
-        return encodedPassword;
+        return rawPassword;
     }
 
     private String randomPassword() {

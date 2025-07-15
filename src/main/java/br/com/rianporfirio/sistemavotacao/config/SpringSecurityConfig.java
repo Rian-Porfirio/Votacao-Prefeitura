@@ -38,7 +38,7 @@ public class SpringSecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/dashboard/")
                 )
                 .logout(logout -> logout
                         .permitAll()
