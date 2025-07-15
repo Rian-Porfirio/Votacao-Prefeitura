@@ -1,9 +1,317 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{dashboard}" lang="br">
+<script layout:fragment="scripts" th:inline="javascript">
+  /*<![CDATA[*/
+  document.addEventListener("DOMContentLoaded", function () {
+    const empresasTopFive = /*[[${empresasTopFive}]]*/[];
+    const dadosTopFive = /*[[${dadosTopFive}]]*/[];
+
+    const categorias = /*[[${empresasRanking}]]*/ [];
+    const dados = /*[[${votosRanking}]]*/ [];
+
+    const chart = Highcharts.chart('votos', {
+      chart: {
+        events: {
+          fullscreenOpen: function () {
+            this.update({
+              xAxis: {
+                categories: categorias
+              },
+              series: {
+                data: dados,
+              }
+            });
+          },
+          fullscreenClose: function () {
+            this.update({
+              xAxis: {
+                categories: empresasTopFive
+              },
+              series: {
+                data: dadosTopFive,
+              }
+            });
+          }
+        },
+        inverted: true
+      },
+      title: {
+        text: 'Votos por empresa'
+      },
+      credits: {
+        enabled: false
+      },
+      colors: [
+        '#104072',
+        '#194c82',
+        '#235893',
+        '#2d64a4',
+        '#3770b5',
+        '#418cc5',
+        '#4ba8d6',
+        '#55c4e7',
+        '#61ccec',
+        '#6dd3f1',
+        '#79dbf6',
+        '#85e3fb',
+        '#91ebff',
+        '#a1efff',
+        '#b0f4ff'
+      ],
+      xAxis: {
+        categories: empresasTopFive,
+        labels: {
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      yAxis: {
+        title: {
+          text: ''
+        },
+        labels: {
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+          borderRadius: 7
+        }
+      },
+      series: [{
+        type: 'column',
+        name: 'Unemployed',
+        borderRadius: 5,
+        colorByPoint: true,
+        data: dadosTopFive,
+        showInLegend: false
+      }]
+    });
+
+    document.getElementById('plain').addEventListener('click', () => {
+      chart.update({
+        chart: {
+          inverted: false,
+          polar: false,
+        },
+      });
+    });
+
+    document.getElementById('inverted').addEventListener('click', () => {
+      chart.update({
+        chart: {
+          inverted: true,
+          polar: false
+        },
+      });
+    });
+
+    Highcharts.chart('votosPorSemana', {
+      chart: {
+        type: 'column',
+        events: {
+          fullscreenOpen: function () {
+            this.update({
+              plotOptions: {
+                column: {
+                cursor: 'default',
+                  point: {
+                    events: {
+                      click: undefined
+                    }
+                  }
+                }
+              }
+            });
+          },
+          fullscreenClose: function () {
+            this.update({
+              plotOptions: {
+                column: {
+                  cursor: 'pointer',
+                  point: {
+                    events: {
+                      click: function () {
+                        const day = this.category;
+                        alert(day);
+                      }
+                    }
+                  }
+                }
+              }
+            });
+          }
+        }
+      },
+      title: {
+        text: 'Votos por Dia',
+      },
+      xAxis: {
+        categories: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'],
+        crosshair: true,
+        accessibility: {
+          description: 'Dias da Semana'
+        },
+        labels: {
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      yAxis: {
+        title: {
+          enabled: false
+        },
+        labels: {
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+          borderRadius: 7,
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: function () {
+                const day = this.category;
+                alert(day)
+              }
+            }
+          }
+        }
+      },
+      series: [
+        {
+          name: 'Votos',
+          color: '#104072',
+          data: [387749, 280000, 129000, 64300, 54000]
+        },
+      ]
+    });
+  });
+  /*]]>*/
+</script>
 <body>
-<main layout:fragment="content">
-  <h1>Empresas</h1>
+<main layout:fragment="content" style="overflow-y: scroll;">
+  <div class="votacaoDash__header-content">
+      <div class="votacaoDash__grafico-container">
+        <figure class="highcharts-figure">
+          <div id="votos">
+          </div>
+          <button id="plain" class="highcharts-demo-button">Plano</button>
+          <button id="inverted" class="highcharts-demo-button">Invertido</button>
+        </figure>
+      </div>
+  </div>
+  <div class="votacaoDash__bottom-content">
+    <div class="dataTable__container">
+      <div class="dataTable__header">
+        <div class="dataTable__left-content">
+          <span>Relatórios</span>
+          <form method="get" th:action="@{/dashboard/votacao}">
+            <input class="form-control" type="search" placeholder="Pesquisar Empresa" aria-label="Search" name="search" th:value="${search}">
+          </form>
+        </div>
+        <div class="dataTable__right-content">
+          <span>Mostrar <i class="bi bi-caret-down"></i></span>
+          <span>Filtrar <i class="bi bi-filter"></i></span>
+          <div>
+            <form th:action="@{/relatorio/geral}" method="GET">
+              <button class="dataTable__button">Relatório Geral</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <table class="dataTable">
+        <thead class="dataTable__thead">
+        <tr>
+          <th>Logo</th>
+          <th style="width: 40%">Nome</th>
+          <th style="width: 10%">x</th>
+        </tr>
+        </thead>
+        <tbody class="dataTable__body" id="tabelaEmpresas" style="max-height: 330px">
+        <tr th:each="empresa : ${empresas}">
+          <td>
+            <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
+          </td>
+          <td th:text="${empresa.nome}" style="width: 40%"></td>
+          <td style="width: 10%">
+            <form th:action="@{/relatorio/unico/{id}(id=${empresa.id})}" method="GET">
+              <button class="btn btn-primary">Relatório</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="votacaoDash__segundo-grafico">
+    <figure class="highcharts-figure">
+      <div id="votosPorSemana">
+      </div>
+    </figure>
+  </div>
+  <div class="votacaoDash__table-usuarios" style="overflow: hidden">
+    <div class="dataTable__container">
+      <div class="dataTable__header">
+        <div class="dataTable__left-content">
+          <span>Lista de Votos</span>
+
+          <form method="get" th:action="@{/dashboard/votacao}">
+            <input class="form-control"
+                   type="search"
+                   placeholder="Pesquisar funcionário"
+                   name="search"
+                   th:value="${search}">
+
+            <input type="hidden" name="status" th:value="${status}" />
+          </form>
+
+        </div>
+        <div class="dataTable__right-content">
+          <span>Mostrar <i class="bi bi-caret-down"></i></span>
+          <span>Filtrar <i class="bi bi-filter"></i></span>
+        </div>
+      </div>
+      <table class="dataTable">
+        <thead class="dataTable__thead">
+        <tr>
+          <th>Matrícula</th>
+          <th>Nome</th>
+          <th style="width: 25%">Empresa Votada</th>
+          <th style="width: 15%">Data/Hora</th>
+        </tr>
+        </thead>
+        <tbody class="dataTable__body" style="height: 320px">
+        <tr th:each="usuario : ${usuarios}">
+          <td th:text="${usuario.matricula}"></td>
+          <td th:text="${usuario.nome}"></td>
+          <td th:text="${usuario.vinculo}" style="width: 25%; padding-left: 35px;"></td>
+          <td style="width: 15%">
+            11 / 07 / 2025 15:32
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </main>
 </body>
 </html>
