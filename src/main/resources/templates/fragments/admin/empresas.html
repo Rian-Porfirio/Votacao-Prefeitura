@@ -69,6 +69,7 @@
         </div>
 
     <div th:each="empresa : ${empresas}">
+        <div th:fragment="~{/fragments/card::empresaCard (${empresa}, false)}"></div>
         <div class="modal fade" th:id="'modalDelete' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -103,7 +104,7 @@
                             </div>
                             <div>
                                 <label th:for="descricaoModalEdit + ${empresa.id}" class="form-label">Descrição</label>
-                                <textarea class="form-control" th:id="descricaoModalEdit + ${empresa.id}" th:text="${empresa.descricao}" rows="3" style="resize: none; height: 120px;" name="descricao"></textarea>
+                                <textarea  maxlength="200" class="form-control" th:id="descricaoModalEdit + ${empresa.id}" th:text="${empresa.descricao}" rows="3" style="resize: none; height: 120px;" name="descricao"></textarea>
                             </div>
                             <div class="modalEmpresa__file-upload">
                                 <label th:for="imageEdit + ${empresa.id}" class="modalEmpresa__file-label">
@@ -167,21 +168,17 @@
                             </div>
                             <div class="modalEmpresa__preview-container">
                                 <div class="modalEmpresa__preview-content">
-                                    <div class="modalEmpresa__preview-card">
-                                        <div class="modalEmpresa__card-header">
-                                            <img th:src="@{/assets/images/no-image-background.png}" alt="logo" id="previewImage" class="modalEmpresa__card-image"/>
+                                    <div class="company-card" id="company-2" style="width: 80%;">
+                                        <div class="company-card__header">
+                                            <h3 class="company-card__title"><i class="bi bi-building-fill"></i> <span id="nomeEmpresa">Nome da Empresa</span></h3>
+                                            <img alt="Logo Empresa" class="company-card__image" id="previewImage" th:src="@{/assets/images/no-image-background.png}" style="object-fit: contain; background-color: var(--preto-padrao-9)"/>
                                         </div>
-                                        <div class="modalEmpresa__card-content">
-                                            <div class="modalEmpresa__card-info">
-                                                <span id="nomeEmpresa" style="font-weight: bolder; font-size: 1rem">Nome da Empresa</span>
-                                                <span id="cnpj">CNPJ</span>
-                                                <span id="descricao">Descrição</span>
-                                            </div>
-                                            <div class="modalEmpresa__button-container">
-                                                <button class="modalEmpresa__button modalEmpresa__button-confirmar">
-                                                    Votar nesta empresa
-                                                </button>
-                                            </div>
+                                        <div class="company-card__content">
+                                            <p class="company-card__description" id="descricao">
+                                                Especializada em gestão de benefícios corporativos com foco em vale alimentação e refeição, proporcionando facilidade e economia para empresas.
+                                            </p>
+                                            <p class="company-card__cnpj"><i class="bi bi-file-earmark-text"></i> CNPJ: <span id="cnpj">12.345.678/9101-12</span></p>
+                                            <button class="company-card__vote-button"><i class="bi bi-check-all"></i> Votar</button>
                                         </div>
                                     </div>
                                 </div>

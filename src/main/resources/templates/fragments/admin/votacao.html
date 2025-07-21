@@ -4,114 +4,6 @@
 <script layout:fragment="scripts" th:inline="javascript">
   /*<![CDATA[*/
   document.addEventListener("DOMContentLoaded", function () {
-    const empresasTopFive = /*[[${empresasTopFive}]]*/[];
-    const dadosTopFive = /*[[${dadosTopFive}]]*/[];
-
-    const categorias = /*[[${empresasRanking}]]*/ [];
-    const dados = /*[[${votosRanking}]]*/ [];
-
-    const chart = Highcharts.chart('votos', {
-      chart: {
-        events: {
-          fullscreenOpen: function () {
-            this.update({
-              xAxis: {
-                categories: categorias
-              },
-              series: {
-                data: dados,
-              }
-            });
-          },
-          fullscreenClose: function () {
-            this.update({
-              xAxis: {
-                categories: empresasTopFive
-              },
-              series: {
-                data: dadosTopFive,
-              }
-            });
-          }
-        },
-        inverted: true
-      },
-      title: {
-        text: 'Votos por empresa'
-      },
-      credits: {
-        enabled: false
-      },
-      colors: [
-        '#104072',
-        '#194c82',
-        '#235893',
-        '#2d64a4',
-        '#3770b5',
-        '#418cc5',
-        '#4ba8d6',
-        '#55c4e7',
-        '#61ccec',
-        '#6dd3f1',
-        '#79dbf6',
-        '#85e3fb',
-        '#91ebff',
-        '#a1efff',
-        '#b0f4ff'
-      ],
-      xAxis: {
-        categories: empresasTopFive,
-        labels: {
-          style: {
-            fontWeight: 'bold'
-          }
-        }
-      },
-      yAxis: {
-        title: {
-          text: ''
-        },
-        labels: {
-          style: {
-            fontWeight: 'bold'
-          }
-        }
-      },
-      plotOptions: {
-        column: {
-          pointPadding: 0.2,
-          borderWidth: 0,
-          borderRadius: 7
-        }
-      },
-      series: [{
-        type: 'column',
-        name: 'Unemployed',
-        borderRadius: 5,
-        colorByPoint: true,
-        data: dadosTopFive,
-        showInLegend: false
-      }]
-    });
-
-    document.getElementById('plain').addEventListener('click', () => {
-      chart.update({
-        chart: {
-          inverted: false,
-          polar: false,
-        },
-      });
-    });
-
-    document.getElementById('inverted').addEventListener('click', () => {
-      chart.update({
-        chart: {
-          inverted: true,
-          polar: false
-        },
-      });
-    });
-
     Highcharts.chart('votosPorSemana', {
       chart: {
         type: 'column',
@@ -149,6 +41,37 @@
           }
         }
       },
+      lang: {
+        viewFullscreen: "Tela Cheia",
+        printChart: "Imprimir Gráfico",
+        exitFullscreen: "Dados simples",
+        noData: "Ainda não há dados para realizar as análises"
+      },
+      noData: {
+        style: {
+          fontWeight: 'bold',
+          fontSize: '16px',
+          fontFamily: 'system-ui',
+          color: 'rgba(48,48,48,0.7)'
+        }
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+            menuItems: [
+              'viewFullscreen',
+              'printChart',
+              'separator',
+              'downloadPNG',
+              'downloadJPEG',
+              'downloadSVG',
+              'separator',
+              'downloadCSV',
+              'downloadXLS'
+            ]
+          }
+        }
+      },
       title: {
         text: 'Votos por Dia',
       },
@@ -177,6 +100,20 @@
       legend: {
         enabled: false
       },
+      colors: [
+        '#104072',
+        '#194c82',
+        '#418cc5',
+        '#4ba8d6',
+        '#55c4e7',
+        '#61ccec',
+        '#6dd3f1',
+        '#79dbf6',
+        '#85e3fb',
+        '#91ebff',
+        '#a1efff',
+        '#b0f4ff'
+      ],
       credits: {
         enabled: false
       },
@@ -199,8 +136,10 @@
       series: [
         {
           name: 'Votos',
-          color: '#104072',
-          data: [387749, 280000, 129000, 64300, 54000]
+          colorByPoint: true,
+          data: [
+            980, 950, 920, 880, 850,
+          ]
         },
       ]
     });
@@ -208,60 +147,7 @@
   /*]]>*/
 </script>
 <body>
-<main layout:fragment="content" style="overflow-y: scroll;">
-  <div class="votacaoDash__header-content">
-      <div class="votacaoDash__grafico-container">
-        <figure class="highcharts-figure">
-          <div id="votos">
-          </div>
-          <button id="plain" class="highcharts-demo-button">Plano</button>
-          <button id="inverted" class="highcharts-demo-button">Invertido</button>
-        </figure>
-      </div>
-  </div>
-  <div class="votacaoDash__bottom-content">
-    <div class="dataTable__container">
-      <div class="dataTable__header">
-        <div class="dataTable__left-content">
-          <span>Relatórios</span>
-          <form method="get" th:action="@{/dashboard/votacao}">
-            <input class="form-control" type="search" placeholder="Pesquisar Empresa" aria-label="Search" name="search" th:value="${search}">
-          </form>
-        </div>
-        <div class="dataTable__right-content">
-          <span>Mostrar <i class="bi bi-caret-down"></i></span>
-          <span>Filtrar <i class="bi bi-filter"></i></span>
-          <div>
-            <form th:action="@{/relatorio/geral}" method="GET">
-              <button class="dataTable__button">Relatório Geral</button>
-            </form>
-          </div>
-        </div>
-      </div>
-      <table class="dataTable">
-        <thead class="dataTable__thead">
-        <tr>
-          <th>Logo</th>
-          <th style="width: 40%">Nome</th>
-          <th style="width: 10%">x</th>
-        </tr>
-        </thead>
-        <tbody class="dataTable__body" id="tabelaEmpresas" style="max-height: 330px">
-        <tr th:each="empresa : ${empresas}">
-          <td>
-            <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
-          </td>
-          <td th:text="${empresa.nome}" style="width: 40%"></td>
-          <td style="width: 10%">
-            <form th:action="@{/relatorio/unico/{id}(id=${empresa.id})}" method="GET">
-              <button class="btn btn-primary">Relatório</button>
-            </form>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<main layout:fragment="content">
   <div class="votacaoDash__segundo-grafico">
     <figure class="highcharts-figure">
       <div id="votosPorSemana">

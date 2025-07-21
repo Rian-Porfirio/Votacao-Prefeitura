@@ -57,6 +57,7 @@ function handleFileUpload(event) {
     reader.readAsDataURL(file);
 
     reader.onloadend = (e) => {
+        imagemPreview.style.removeProperty('object-fit')
         imagemPreview.src = e.target.result;
     }
 }
