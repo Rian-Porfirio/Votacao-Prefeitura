@@ -1,25 +1,9 @@
+@import url('colors.css');
+
 * {
-    font-family: "Inter", sans-serif;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-}
-
-:root {
-    --azul-prefeitura: #0073C9;
-    --azul-escuro-prefeitura: #104072;
-    --preto-padrao: #000;
-    --preto-padrao-9: #00000016;
-    --preto-padrao-50: #0000007F;
-    --cor-de-fundo: #EAEAEA;
-    --branco-padrao: #fff;
-    --branco-padrao-80: #FFFFFFCC;
-    --branco-variante-II: #DFE3E8;
-    --branco-variante-III: #ced4da;
-    --fonte-verde-80: #004E00;
-    --container-verde-85: #A8FFB8;
-    --fonte-vermelho-escuro: #4E0000;
-    --container-vermelho-75: #FF8888;
 }
 
 .identity-background {
@@ -358,7 +342,7 @@ nav {
 
 .navbar__container {
     width: 12vw;
-    min-width: 275px;
+    min-width: 250px;
     height: 100vh;
 
     display: flex;
@@ -384,7 +368,7 @@ nav {
 }
 
 .navbar__title {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bolder;
 }
 
@@ -449,7 +433,7 @@ nav {
 .bi-info-circle-fill,
 .bi-house-door,
 .bi-box-arrow-left,
-.bi-heart-pulse-fill,
+.bi-folder-fill,
 .bi-filter {
     font-size: 1.3rem;
 }
@@ -922,7 +906,6 @@ nav {
 }
 
 .votacaoDash__segundo-grafico {
-    margin-top: 6rem;
     height: 350px;
     background-color: var(--branco-padrao);
     padding: 1.5rem;
@@ -962,3 +945,4 @@ nav {
 .highcharts-demo-button:hover {
     background: #d2d2d2;
 }
+
