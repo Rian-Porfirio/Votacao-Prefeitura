@@ -68,27 +68,33 @@ public class FuncionarioService {
 
         if (status == null) {
             basePage = funcionarioRepository.findAll(pageable);
-        } else {
-            status = status.trim().toLowerCase();
-            basePage = switch (status) {
-                case "aptos" -> funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCase("ESTAGIÁRIO", pageable);
-                case "inaptos" -> funcionarioRepository.findBySenhaIsNull(pageable);
-                case "sem_senha" ->
-                        funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCase("ESTAGIÁRIO", pageable);
-                default -> funcionarioRepository.findAll(pageable);
-            };
+            return loadSearchFilter(search, basePage, pageable);
         }
 
+        status = status.trim().toLowerCase();
+
+        basePage = switch (status) {
+            case "aptos" -> funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCase("ESTAGIÁRIO", pageable);
+            case "inaptos" -> funcionarioRepository.findBySenhaIsNull(pageable);
+            case "sem_senha" -> funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCase("ESTAGIÁRIO", pageable);
+            case "nao_votou" -> funcionarioRepository.findNoVote(pageable);
+            default -> funcionarioRepository.findAll(pageable);
+        };
+
+        return loadSearchFilter(search, basePage, pageable);
+    }
+
+
+    private Page<Funcionario> loadSearchFilter(String search, Page<Funcionario> basePage, Pageable pageable) {
         if (search != null && !search.isBlank()) {
-            return new PageImpl<>(
-                    basePage.getContent().stream()
-                            .filter(f -> f.getNome().toUpperCase().contains(search.toUpperCase()))
-                            .toList(),
-                    pageable,
-                    basePage.getTotalElements()
-            );
+            List<Funcionario> filteredList = basePage.getContent().stream()
+                    .filter(f -> f.getNome().contains(search.toUpperCase()))
+                    .toList();
+
+            return new PageImpl<>(filteredList, pageable, filteredList.size());
         }
 
         return basePage;
     }
+
 }
