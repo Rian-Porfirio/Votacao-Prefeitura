@@ -196,6 +196,7 @@
     justify-content: center;
     gap: 2px;
 
+    width: 100%;
     padding: 0.2rem 1rem;
     background-color: #3366cc;
     color: white;
@@ -205,7 +206,7 @@
     align-self: flex-end;
 }
 
-.bi-building-fill {
+.bi-building-fill--active {
     color: var(--azul-prefeitura);
 }
 
@@ -222,6 +223,10 @@
     font-size: 0.9rem;
     max-width: 672px;
     color: #646464;
+}
+
+.instructions p {
+    margin-bottom: 0;
 }
 
 .footer {
@@ -271,6 +276,10 @@
 .footer__copyright {
     font-size: 0.8rem;
     margin-top: 0.5rem;
+    color: #777;
+}
+
+.footer__link {
     color: #777;
 }
 

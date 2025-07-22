@@ -2,6 +2,7 @@ package br.com.rianporfirio.sistemavotacao.service;
 
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
+import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegistered;
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -22,22 +23,21 @@ public class FuncionarioService {
         this.empresaRepository = empresaRepository;
     }
 
-    public void inserirVoto(long empresaId, String matricula) {
-        var opcao = empresaRepository.findById(empresaId).get();
+    public void inserirVoto(long empresaId, String matricula) throws Exception {
+        var empresa = empresaRepository.findById(empresaId).get();
         var funcionario = funcionarioRepository.findByMatricula(matricula);
-        funcionario.votar(opcao);
+
+        if(funcionario.getEmpresa() != null) {
+            throw new VoteAlreadyRegistered("Usuário já possui voto registrado");
+        }
+
+        funcionario.votar(empresa);
         funcionarioRepository.save(funcionario);
     }
 
     public List<Funcionario> getAll() {
         Sort sort = Sort.by("nome");
         return funcionarioRepository.findAll(sort);
-    }
-
-    public List<Funcionario> listByName(List<Funcionario> listaFiltrada, String search) {
-        return listaFiltrada.stream()
-                .filter(f -> f.getNome().contains(search.toUpperCase()))
-                .toList();
     }
 
     public FuncionarioInfoDto loadInformation() {
