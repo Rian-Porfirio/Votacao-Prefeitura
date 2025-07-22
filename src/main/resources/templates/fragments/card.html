@@ -1,13 +1,16 @@
-<div class="company-card" id="company-2" th:fragment="card(empresa)">
+<div class="company-card" id="company-2" th:fragment="card(empresa, hasVoted)">
   <div class="company-card__header">
-    <h3 class="company-card__title"><i class="bi bi-building-fill"></i> <span th:text="${empresa.nome}">Nome da Empresa</span></h3>
-    <img th:src="${empresa.filePath}" alt="Logo Empresa" class="company-card__image" />
+    <h3 class="company-card__title"><i class="bi bi-building-fill bi-building-fill--active "></i> <span th:text="${empresa.nome}">Nome da Empresa</span></h3>
+    <img th:if="${empresa.filePath != null}" th:src="${empresa.filePath}" alt="Logo Empresa" class="company-card__image" />
+    <img th:if="${empresa.filePath == null}" th:src="@{/assets/images/no-image-background-home.jpg}" alt="Logo Empresa" class="company-card__image" />
   </div>
   <div class="company-card__content">
     <p class="company-card__description" th:text="${empresa.descricao}">
       Especializada em gestão de benefícios corporativos com foco em vale alimentação e refeição, proporcionando facilidade e economia para empresas.
     </p>
     <p class="company-card__cnpj"><i class="bi bi-file-earmark-text"></i> CNPJ: <span th:text="${empresa.cnpj}"></span></p>
-    <button class="company-card__vote-button"><i class="bi bi-check-all"></i> Votar</button>
+    <button class="company-card__vote-button"
+            th:attr='empresa=${empresa.id}'
+            th:disabled="${hasVoted}"><i class="bi bi-check-all"></i> Votar</button>
   </div>
 </div>

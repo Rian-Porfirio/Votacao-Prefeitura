@@ -40,6 +40,10 @@ public class Funcionario implements UserDetails {
         setEmpresa(empresa);
     }
 
+    public boolean hasVoted() {
+        return empresa != null;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + userType.name()));
