@@ -44,6 +44,10 @@
                 <a th:href="@{/dashboard/usuarios(search=${search}, status='sem_senha')}"
                    class="userDash__filter-button"
                    th:classappend="${status == 'sem_senha'} ? ' userDash__filter-button--active' : ''">Sem Senha</a>
+
+                <a th:href="@{/dashboard/usuarios(search=${search}, status='nao_votou')}"
+                   class="userDash__filter-button"
+                   th:classappend="${status == 'nao_votou'} ? ' userDash__filter-button--active' : ''">Não Votou</a>
             </div>
         </div>
     </div>
