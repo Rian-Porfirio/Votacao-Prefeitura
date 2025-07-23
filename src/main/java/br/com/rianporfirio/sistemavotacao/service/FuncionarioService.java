@@ -1,14 +1,17 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
+import br.com.rianporfirio.sistemavotacao.domain.Voto;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
 import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegistered;
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
+import br.com.rianporfirio.sistemavotacao.repository.IVotoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -17,10 +20,12 @@ public class FuncionarioService {
 
     private final IFuncionarioRepository funcionarioRepository;
     private final IEmpresaRepository empresaRepository;
+    private final IVotoRepository votoRepository;
 
-    public FuncionarioService(IFuncionarioRepository funcionarioRepository, IEmpresaRepository empresaRepository) {
+    public FuncionarioService(IFuncionarioRepository funcionarioRepository, IEmpresaRepository empresaRepository, IVotoRepository votoRepository) {
         this.funcionarioRepository = funcionarioRepository;
         this.empresaRepository = empresaRepository;
+        this.votoRepository = votoRepository;
     }
 
     public void inserirVoto(long empresaId, String matricula) throws Exception {
@@ -33,6 +38,7 @@ public class FuncionarioService {
 
         funcionario.votar(empresa);
         funcionarioRepository.save(funcionario);
+        votoRepository.save(new Voto(funcionario, empresa, LocalDateTime.now()));
     }
 
     public List<Funcionario> getAll() {
@@ -84,7 +90,6 @@ public class FuncionarioService {
         return loadSearchFilter(search, basePage, pageable);
     }
 
-
     private Page<Funcionario> loadSearchFilter(String search, Page<Funcionario> basePage, Pageable pageable) {
         if (search != null && !search.isBlank()) {
             List<Funcionario> filteredList = basePage.getContent().stream()
@@ -96,5 +101,4 @@ public class FuncionarioService {
 
         return basePage;
     }
-
 }

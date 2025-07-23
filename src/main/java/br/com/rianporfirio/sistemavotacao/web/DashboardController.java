@@ -4,6 +4,7 @@ import br.com.rianporfirio.sistemavotacao.domain.Empresa;
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
 import br.com.rianporfirio.sistemavotacao.dto.RankingVotosDto;
+import br.com.rianporfirio.sistemavotacao.repository.IVotoRepository;
 import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import br.com.rianporfirio.sistemavotacao.service.FuncionarioService;
 import br.com.rianporfirio.sistemavotacao.service.RankingEmpresaService;
@@ -25,11 +26,13 @@ public class DashboardController {
     private final EmpresaService empresaService;
     private final FuncionarioService funcionarioService;
     private final RankingEmpresaService rankingEmpresaService;
+    private final IVotoRepository repository;
 
-    public DashboardController(EmpresaService empresaService, FuncionarioService funcionarioService, RankingEmpresaService rankingEmpresaService) {
+    public DashboardController(EmpresaService empresaService, FuncionarioService funcionarioService, RankingEmpresaService rankingEmpresaService, IVotoRepository repository) {
         this.empresaService = empresaService;
         this.funcionarioService = funcionarioService;
         this.rankingEmpresaService = rankingEmpresaService;
+        this.repository = repository;
     }
 
     @GetMapping("/**")
@@ -81,27 +84,12 @@ public class DashboardController {
                            @RequestParam(value = "size", defaultValue = "60") int size) {
         getCurrentPath(model, req);
 
-        List<Empresa> empresas =
-                (search == null || search.isBlank()) ? empresaService.getAll() : empresaService.listByName(search);
-        model.addAttribute("empresas", empresas);
         model.addAttribute("search", search);
-
-        Page<Funcionario> funcionarios = funcionarioService.loadFilteredPage(status, search, page, size);
-        RankingVotosDto ranking = rankingEmpresaService.getRanking();
-
-        model.addAttribute("empresasRanking", ranking.empresa().keySet());
-        model.addAttribute("votosRanking", ranking.empresa().values());
-        model.addAttribute("empresasTopFive", ranking.empresa().keySet().stream().limit(5).toList());
-        model.addAttribute("dadosTopFive", ranking.empresa().values().stream().limit(5).toList());
-        model.addAttribute("usuarios", funcionarios.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", funcionarios.getTotalPages());
         model.addAttribute("status", status);
         model.addAttribute("search", search);
         model.addAttribute("size", size);
-
-        FuncionarioInfoDto dto = funcionarioService.loadInformation();
-        model.addAttribute("usuariosInfo", dto);
+        model.addAttribute("votos", repository.findAll());
 
         return fragmentPath + "/votacao";
     }

@@ -16,6 +16,12 @@ public class Voto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Voto(Funcionario funcionario, Empresa empresa, LocalDateTime data) {
+        this.funcionario = funcionario;
+        this.empresa = empresa;
+        this.data = data;
+    }
+
     @OneToOne
     private Funcionario funcionario;
 
