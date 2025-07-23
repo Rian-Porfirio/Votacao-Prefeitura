@@ -186,13 +186,11 @@
         </tr>
         </thead>
         <tbody class="dataTable__body" style="height: 320px">
-        <tr th:each="usuario : ${usuarios}">
-          <td th:text="${usuario.matricula}"></td>
-          <td th:text="${usuario.nome}"></td>
-          <td th:text="${usuario.vinculo}" style="width: 25%; padding-left: 35px;"></td>
-          <td style="width: 15%">
-            11 / 07 / 2025 15:32
-          </td>
+        <tr th:each="voto : ${votos}">
+          <td th:text="${voto.funcionario.matricula}">-</td>
+          <td th:text="${voto.funcionario.nome}">-</td>
+          <td th:text="${voto.empresa.nome}" style="width: 25%; padding-left: 35px;">-</td>
+          <td style="width: 15%" th:text="${#temporals.format(voto.data, 'dd / MM / yyyy HH:mm')}">-</td>
         </tr>
         </tbody>
       </table>
