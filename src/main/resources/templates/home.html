@@ -9,7 +9,11 @@
       <h1 class="header__title">Sistema de Votação - Fornecedores de Benefícios</h1>
     </div>
     <p class="header__subtitle">Escolha seu fornecedor de vale alimentação entre as empresas participantes.</p>
-    <span class="header__badge"><span th:text="${empresas.size()}">N</span> Fornecedores Participantes</span>
+    <span class="header__badge">
+      <span th:if="${empresas.size() == 0}">Não há</span>
+      <span th:if="${empresas.size() > 0}" th:text="${empresas.size()}"></span>
+      Fornecedores Participantes
+    </span>
   </div>
 </header>
 
