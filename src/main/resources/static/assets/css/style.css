@@ -931,3 +931,9 @@ nav {
     background: #d2d2d2;
 }
 
+.login-error {
+    color: red;
+    margin-top: -10px;
+    font-size: 0.9rem;
+}
+
