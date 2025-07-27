@@ -46,17 +46,20 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input tabindex="1" id="username" class="form-control" name="username" placeholder="Matrícula" type="text" autofocus >
+                                                    <input tabindex="1" th:value="${username}" required id="username" class="form-control" name="username" placeholder="Matrícula" type="text" autofocus >
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input tabindex="2" id="password" class="form-control" name="password" placeholder="Senha" type="password">
+                                                    <input tabindex="2" id="password" required class="form-control" name="password" placeholder="Senha" type="password">
                                                 </div>
                                             </div>
                                         </div>
+                                        <p th:if="${param.error}" class="login-error">
+                                            Matrícula ou senha incorreta.
+                                        </p>
                                         <div class="row">
                                             <div class="col-md-7">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#newPasswordModal" class="link">Solicitar nova senha</a>
