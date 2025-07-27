@@ -3,7 +3,7 @@ package br.com.rianporfirio.sistemavotacao.service;
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.domain.Voto;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
-import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegistered;
+import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegisteredException;
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IVotoRepository;
@@ -33,7 +33,7 @@ public class FuncionarioService {
         var funcionario = funcionarioRepository.findByMatricula(matricula);
 
         if(funcionario.getEmpresa() != null) {
-            throw new VoteAlreadyRegistered("Usuário já possui voto registrado");
+            throw new VoteAlreadyRegisteredException("Usuário já possui voto registrado");
         }
 
         funcionario.votar(empresa);
