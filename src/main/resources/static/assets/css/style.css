@@ -937,3 +937,9 @@ nav {
     font-size: 0.9rem;
 }
 
+.dataTable__no-users-message {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    text-align: center;
+}
+

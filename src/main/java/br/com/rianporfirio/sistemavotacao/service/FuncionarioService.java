@@ -21,6 +21,8 @@ public class FuncionarioService {
     private final IFuncionarioRepository funcionarioRepository;
     private final IEmpresaRepository empresaRepository;
     private final IVotoRepository votoRepository;
+    private final String vinculo = "ESTAGIÁRIO";
+    private final int pageSize = 60;
 
     public FuncionarioService(IFuncionarioRepository funcionarioRepository, IEmpresaRepository empresaRepository, IVotoRepository votoRepository) {
         this.funcionarioRepository = funcionarioRepository;
@@ -28,7 +30,7 @@ public class FuncionarioService {
         this.votoRepository = votoRepository;
     }
 
-    public void inserirVoto(long empresaId, String matricula) throws Exception {
+    public void inserirVoto(long empresaId, String matricula) {
         var empresa = empresaRepository.findById(empresaId).get();
         var funcionario = funcionarioRepository.findByMatricula(matricula);
 
@@ -56,49 +58,52 @@ public class FuncionarioService {
     }
 
     public List<Funcionario> loadAllInaptos() {
-        return funcionarioRepository.findBySenhaIsNull();
+        return funcionarioRepository.findBySenhaIsNullOrVinculoIgnoreCase(vinculo);
     }
 
     public List<Funcionario> loadAllSemSenha() {
-        return funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCase("ESTAGIÁRIO");
+        return funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCase(vinculo);
     }
 
     public List<Funcionario> loadAllAptos() {
-        return funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCase("ESTAGIÁRIO");
+        return funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCase(vinculo);
     }
 
-    public Page<Funcionario> loadFilteredPage(String status, String search, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("nome").ascending());
+    public Page<Funcionario> loadPages(String search, String status, int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("nome").ascending());
 
-        Page<Funcionario> basePage;
-
-        if (status == null) {
-            basePage = funcionarioRepository.findAll(pageable);
-            return loadSearchFilter(search, basePage, pageable);
+        if (search != null && !search.isBlank()) {
+            return searchByPage(search, status, pageable);
         }
 
-        status = status.trim().toLowerCase();
+        return loadPageByStatus(status, pageable);
+    }
 
-        basePage = switch (status) {
-            case "aptos" -> funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCase("ESTAGIÁRIO", pageable);
-            case "inaptos" -> funcionarioRepository.findBySenhaIsNull(pageable);
-            case "sem_senha" -> funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCase("ESTAGIÁRIO", pageable);
-            case "nao_votou" -> funcionarioRepository.findNoVote(pageable);
+    private Page<Funcionario> searchByPage(String search, String status, Pageable pageable) {
+        if (status == null) {
+            return funcionarioRepository.findByNomeContainingIgnoreCase(search, pageable);
+        }
+
+        return switch (status) {
+            case "aptos" -> funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCaseAndNomeContainingIgnoreCase(vinculo, search, pageable);
+            case "inaptos" -> funcionarioRepository.findBySenhaIsNullOrVinculoIgnoreCaseAndNomeContainingIgnoreCase(vinculo, search, pageable);
+            case "sem_senha" -> funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCaseAndNomeContainingIgnoreCase(vinculo, search, pageable);
+            case "nao_votou" -> funcionarioRepository.findByEmpresaIsNullAndVinculoNotIgnoreCaseAndNomeContainingIgnoreCase(vinculo, search, pageable);
+            default -> funcionarioRepository.findByNomeContainingIgnoreCase(search, pageable);
+        };
+    }
+
+    private Page<Funcionario> loadPageByStatus(String status, Pageable pageable) {
+        if (status == null) {
+            return funcionarioRepository.findAll(pageable);
+        }
+
+        return switch (status) {
+            case "aptos" -> funcionarioRepository.findBySenhaIsNotNullAndVinculoNotIgnoreCase(vinculo, pageable);
+            case "inaptos" -> funcionarioRepository.findBySenhaIsNullOrVinculoIgnoreCase(vinculo, pageable);
+            case "sem_senha" -> funcionarioRepository.findBySenhaIsNullAndVinculoNotIgnoreCase(vinculo, pageable);
+            case "nao_votou" -> funcionarioRepository.findByEmpresaIsNullAndVinculoNotIgnoreCase(vinculo, pageable);
             default -> funcionarioRepository.findAll(pageable);
         };
-
-        return loadSearchFilter(search, basePage, pageable);
-    }
-
-    private Page<Funcionario> loadSearchFilter(String search, Page<Funcionario> basePage, Pageable pageable) {
-        if (search != null && !search.isBlank()) {
-            List<Funcionario> filteredList = basePage.getContent().stream()
-                    .filter(f -> f.getNome().contains(search.toUpperCase()))
-                    .toList();
-
-            return new PageImpl<>(filteredList, pageable, filteredList.size());
-        }
-
-        return basePage;
     }
 }
