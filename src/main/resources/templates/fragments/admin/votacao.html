@@ -7,39 +7,6 @@
     Highcharts.chart('votosPorSemana', {
       chart: {
         type: 'column',
-        events: {
-          fullscreenOpen: function () {
-            this.update({
-              plotOptions: {
-                column: {
-                cursor: 'default',
-                  point: {
-                    events: {
-                      click: undefined
-                    }
-                  }
-                }
-              }
-            });
-          },
-          fullscreenClose: function () {
-            this.update({
-              plotOptions: {
-                column: {
-                  cursor: 'pointer',
-                  point: {
-                    events: {
-                      click: function () {
-                        const day = this.category;
-                        alert(day);
-                      }
-                    }
-                  }
-                }
-              }
-            });
-          }
-        }
       },
       lang: {
         viewFullscreen: "Tela Cheia",
@@ -122,15 +89,6 @@
           pointPadding: 0.2,
           borderWidth: 0,
           borderRadius: 7,
-          cursor: 'pointer',
-          point: {
-            events: {
-              click: function () {
-                const day = this.category;
-                alert(day)
-              }
-            }
-          }
         }
       },
       series: [
