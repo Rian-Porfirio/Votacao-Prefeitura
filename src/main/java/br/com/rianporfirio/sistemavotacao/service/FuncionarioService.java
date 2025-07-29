@@ -20,7 +20,7 @@ public class FuncionarioService {
 
     private final IFuncionarioRepository funcionarioRepository;
     private final IEmpresaRepository empresaRepository;
-    private final IVotoRepository votoRepository;;
+    private final IVotoRepository votoRepository;
     private final String vinculo = "ESTAGIÁRIO";
     private final int pageSize = 60;
 

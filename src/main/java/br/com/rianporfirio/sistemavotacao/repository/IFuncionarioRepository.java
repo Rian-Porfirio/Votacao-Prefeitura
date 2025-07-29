@@ -1,6 +1,5 @@
 package br.com.rianporfirio.sistemavotacao.repository;
 
-import br.com.rianporfirio.sistemavotacao.domain.Empresa;
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
