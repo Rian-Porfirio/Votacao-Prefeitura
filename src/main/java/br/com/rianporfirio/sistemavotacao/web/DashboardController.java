@@ -28,7 +28,10 @@ public class DashboardController {
     private final RankingEmpresaService rankingEmpresaService;
     private final IVotoRepository repository;
 
-    public DashboardController(EmpresaService empresaService, FuncionarioService funcionarioService, RankingEmpresaService rankingEmpresaService, IVotoRepository repository) {
+    public DashboardController(EmpresaService empresaService,
+                               FuncionarioService funcionarioService,
+                               RankingEmpresaService rankingEmpresaService,
+                               IVotoRepository repository) {
         this.empresaService = empresaService;
         this.funcionarioService = funcionarioService;
         this.rankingEmpresaService = rankingEmpresaService;
@@ -56,19 +59,16 @@ public class DashboardController {
     public String users(Model model, HttpServletRequest req,
                         @RequestParam(value = "search", required = false) String search,
                         @RequestParam(value = "status", required = false) String status,
-                        @RequestParam(value = "page", defaultValue = "0") int page,
-                        @RequestParam(value = "size", defaultValue = "60") int size) {
-
+                        @RequestParam(value = "page", defaultValue = "0") int page) {
         getCurrentPath(model, req);
 
-        Page<Funcionario> funcionarios = funcionarioService.loadFilteredPage(status, search, page, size);
+        Page<Funcionario> funcionarios = funcionarioService.loadPages(search, status, page);
 
         model.addAttribute("usuarios", funcionarios.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", funcionarios.getTotalPages());
         model.addAttribute("status", status);
         model.addAttribute("search", search);
-        model.addAttribute("size", size);
 
         FuncionarioInfoDto dto = funcionarioService.loadInformation();
         model.addAttribute("usuariosInfo", dto);
@@ -107,16 +107,13 @@ public class DashboardController {
         model.addAttribute("empresas", empresas);
         model.addAttribute("search", search);
 
-        Page<Funcionario> funcionarios = funcionarioService.loadFilteredPage(status, search, page, size);
         RankingVotosDto ranking = rankingEmpresaService.getRanking();
 
         model.addAttribute("empresasRanking", ranking.empresa().keySet());
         model.addAttribute("votosRanking", ranking.empresa().values());
         model.addAttribute("empresasTopFive", ranking.empresa().keySet().stream().limit(5).toList());
         model.addAttribute("dadosTopFive", ranking.empresa().values().stream().limit(5).toList());
-        model.addAttribute("usuarios", funcionarios.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", funcionarios.getTotalPages());
         model.addAttribute("status", status);
         model.addAttribute("search", search);
         model.addAttribute("size", size);

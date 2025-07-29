@@ -84,7 +84,7 @@
                 </tr>
                 </thead>
                 <tbody class="dataTable__body">
-                <tr th:each="usuario : ${usuarios}">
+                <tr th:if="${usuarios.size() > 0}" th:each="usuario : ${usuarios}">
                     <td th:text="${usuario.matricula}"></td>
                     <td th:text="${usuario.nome}"></td>
                     <td th:text="${usuario.vinculo}"></td>
@@ -106,6 +106,7 @@
                 </tr>
                 </tbody>
             </table>
+                <p th:if="${usuarios.size() == 0}" class="dataTable__no-users-message">Não há usuários a serem exibidos</p>
         </div>
     </div>
 
@@ -136,7 +137,7 @@
 
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/dashboard/usuarios(page=${currentPage - 1}, size=${size}, search=${search}, status=${status})}"
+                   th:href="@{/dashboard/usuarios(page=${currentPage - 1}, search=${search}, status=${status})}"
                    aria-label="Anterior">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
@@ -146,13 +147,13 @@
                 th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                 th:classappend="${i == currentPage} ? 'active'">
                 <a class="page-link"
-                   th:href="@{/dashboard/usuarios(page=${i}, size=${size}, search=${search}, status=${status})}"
+                   th:href="@{/dashboard/usuarios(page=${i}, search=${search}, status=${status})}"
                    th:text="${i + 1}">1</a>
             </li>
 
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/dashboard/usuarios(page=${currentPage + 1}, size=${size}, search=${search}, status=${status})}"
+                   th:href="@{/dashboard/usuarios(page=${currentPage + 1}, search=${search}, status=${status})}"
                    aria-label="Próximo">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
