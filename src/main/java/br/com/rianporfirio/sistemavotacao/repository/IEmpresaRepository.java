@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IEmpresaRepository extends JpaRepository<Empresa, Long> {
     List<Empresa> findAllByNomeContainingIgnoreCase(String name);
+
+    Empresa findByNomeIgnoreCaseOrCnpj(String nome, String cnpj);
 }

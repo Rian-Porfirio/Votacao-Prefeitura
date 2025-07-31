@@ -3,9 +3,12 @@ package br.com.rianporfirio.sistemavotacao.web;
 import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
 import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @Controller
@@ -19,13 +22,14 @@ public class EmpresasController {
     }
 
     @PostMapping("/create")
-    public String createEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto) {
+    public ResponseEntity<String> createEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto) throws IOException {
         try {
             empresaService.create(empresaDto, foto);
+            return ResponseEntity.ok("Empresa Registrada Com Sucesso");
         } catch (Exception ex) {
             log.error("não foi possível inserir uma nova empresa no sistema. Motivo: {}", ex.getMessage());
+            throw ex;
         }
-        return defaultRedirect;
     }
 
     @PostMapping("/update/{id}")
