@@ -2,6 +2,7 @@ const dragContainer = document.getElementById('dragContainer');
 const dragArea = document.getElementById('dragArea')
 const inputImagem = document.getElementById('imageAdd');
 const imagemPreview = document.getElementById('previewImage');
+const maxFileSize = 2 * 1024 * 1024 // 2MB
 
 function preventDefault(event) {
     event.preventDefault();
@@ -21,19 +22,26 @@ function isFileTypeValid(file) {
     return allowedMimeTypes.includes(file.type);
 }
 
-function setErrorMessage() {
-    const errorMessage = document.createElement('span');
-    errorMessage.textContent = "Tipo de arquivo inválido. Envie PNG, JPG ou JPEG .";
+export function setErrorMessage(error) {
+    const errorMessage = document.createElement('p');
+    errorMessage.textContent = error;
     errorMessage.className = 'error-message';
 
     dragContainer.appendChild(errorMessage);
-    dragContainer.classList.add('image-not-valid');
+    dragContainer.classList.add('input-error');
 }
 
 function handleFileUpload(event) {
+    removeErrors();
     const file = event.dataTransfer?.files[0] || event.target?.files[0];
 
     if (!file) {
+        setImagePreview();
+        return;
+    }
+
+    if (file.size > maxFileSize) {
+        setErrorMessage("Arquivo excede o limite de 2MB");
         return;
     }
 
@@ -41,15 +49,8 @@ function handleFileUpload(event) {
     dataTransfer.items.add(file);
     inputImagem.files = dataTransfer.files;
 
-    const error = dragContainer.querySelector('.error-message');
-
-    if (error) {
-        dragContainer.removeChild(error);
-        dragContainer.classList.remove('image-not-valid');
-    }
-
     if (!isFileTypeValid(file)) {
-        setErrorMessage();
+        setErrorMessage("Tipo de Arquivo Inválido. Envie PNG, JPG ou JPEG .");
         return;
     }
 
@@ -57,8 +58,7 @@ function handleFileUpload(event) {
     reader.readAsDataURL(file);
 
     reader.onloadend = (e) => {
-        imagemPreview.style.removeProperty('object-fit')
-        imagemPreview.src = e.target.result;
+        setImagePreview(e);
     }
 }
 
@@ -73,6 +73,25 @@ dragEvents.map(event => {
         dragArea.addEventListener(event, draggingOverFeedback);
     }
 })
+
+function setImagePreview(e) {
+    if (e) {
+        imagemPreview.src = e.target.result;
+        imagemPreview.style.setProperty('object-fit', 'cover');
+    } else {
+        imagemPreview.src = "/assets/images/no-image-background.png";
+        imagemPreview.style.setProperty('object-fit', 'contain');
+    }
+}
+
+function removeErrors() {
+    const error = dragContainer.querySelector('.error-message');
+
+    if (error) {
+        error.remove();
+        dragContainer.classList.remove('input-error');
+    }
+}
 
 dragArea.addEventListener('drop', handleFileUpload);
 inputImagem.addEventListener('change', handleFileUpload);

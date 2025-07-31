@@ -51,6 +51,41 @@
     <main layout:fragment="content" class="dashboard__content">
     </main>
 
+    <div class="modal fade" id="modalErrorToggle" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white justify-content-center">
+                    <div class="w-100 text-center">
+                        <i class="bi bi-x-circle fs-1 text-white"></i>
+                        <p class="modal-title fs-3 fw-semibold text-white">Essa não! Algo deu errado!</p>
+                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <p id="errorModalMessage" class="fw-bolder"></p>
+                    <button class="btn btn-danger w-50" data-bs-toggle="modal">Compreendo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalSuccessToggle" aria-hidden="true" aria-labelledby="modalSuccessToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center bg-success">
+                    <div class="w-100 text-center">
+                        <i class="bi bi-check-circle fs-1 text-white"></i>
+                        <p class="modal-title fs-3 fw-semibold text-white" id="modalSuccessToggleLabel">Sucesso!</p>
+                    </div>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="fw-semibold" role="alert" id="successMessage">
+                    </div>
+                    <button class="btn btn-success w-50" data-bs-toggle="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script layout:fragment="scripts"></script>
 </body>
 </html>

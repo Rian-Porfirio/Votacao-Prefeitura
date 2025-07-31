@@ -136,11 +136,11 @@
                         <div class="modalEmpresa__content">
                             <div class="modalEmpresa__formulario-container">
                                 <form th:action="@{/create}" method="post" enctype="multipart/form-data" id="formNovaEmpresa">
-                                    <div>
+                                    <div id="nameInputContainer">
                                         <label for="nameModalAdd" class="form-label">Nome da Empresa *</label>
                                         <input required minlength="3" type="text" name="nome" class="form-control" id="nameModalAdd" placeholder="Insira o nome da empresa" aria-describedby="nome empresa">
                                     </div>
-                                    <div>
+                                    <div id="cnpjInputContainer">
                                         <label for="cnpjModalAdd" class="form-label">CNPJ *</label>
                                         <input required maxlength="18" type="text" name="cnpj" class="form-control" id="cnpjModalAdd" placeholder="00.000.000/0000-00" aria-describedby="cnpj empresa">
                                     </div>
@@ -150,7 +150,7 @@
                                     </div>
                                     <div class="modalEmpresa__file-upload" id="dragContainer">
                                         <label for="imageAdd" class="modalEmpresa__file-label" id="dragArea">
-                                            <b>Clique para enviar</b> ou arraste e solte <br/> PNG, JPG ou JPEG  (max. 800x400px)
+                                            <b>Clique para enviar</b> ou arraste e solte <br/> PNG, JPG ou JPEG  (max. 2MB)
                                             <input type="file"
                                                    class="modalEmpresa__file-upload"
                                                    id="imageAdd"
@@ -161,8 +161,15 @@
                                         </label>
                                     </div>
                                     <div class="modalEmpresa__button-container">
-                                        <button type="button" class="modalEmpresa__button modalEmpresa__button-cancelar" data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="modalEmpresa__button modalEmpresa__button-confirmar">Confirmar</button>
+                                        <button type="button" class="modalEmpresa__button modalEmpresa__button-cancelar" data-bs-dismiss="modal" id="cancelarBtn">Cancelar</button>
+                                        <button type="submit" class="modalEmpresa__button modalEmpresa__button-confirmar" id="confirmCreate">
+                                            <span id="loading" class="process-text">
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                <span> Processando...</span>
+                                            </span>
+                                            <span id="confirmText" class="process-text visible">Confirmar</span>
+                                            <span id="successText" class="process-text">Empresa Registrada</span>
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -171,7 +178,7 @@
                                     <div class="company-card" id="company-2" style="width: 80%;">
                                         <div class="company-card__header">
                                             <h3 class="company-card__title"><i class="bi bi-building-fill"></i> <span id="nomeEmpresa">Nome da Empresa</span></h3>
-                                            <img alt="Logo Empresa" class="company-card__image" id="previewImage" th:src="@{/assets/images/no-image-background.png}" style="object-fit: contain; background-color: var(--preto-padrao-9)"/>
+                                            <img alt="Logo Empresa" class="company-card__image" id="previewImage" th:src="@{/assets/images/no-image-background.png}" style="object-fit: contain;"/>
                                         </div>
                                         <div class="company-card__content">
                                             <p class="company-card__description" id="descricao">

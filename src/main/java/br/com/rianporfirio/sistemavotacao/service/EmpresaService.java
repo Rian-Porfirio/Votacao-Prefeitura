@@ -29,8 +29,14 @@ public class EmpresaService {
     }
 
     public void create(EmpresaDto dto, MultipartFile file) throws IOException {
-        String filePath = uploadImageService.uploadLogo(file, dto.nome());
-        empresaRepository.save(new Empresa(filePath, dto.nome(), dto.cnpj(), dto.descricao()));
+        String nomeEmpresa = dto.nome().trim();
+        Empresa empresa = empresaRepository.findByNomeIgnoreCaseOrCnpj(nomeEmpresa, dto.cnpj());
+        if (empresa != null) {
+            validateInputs(empresa, nomeEmpresa);
+        }
+
+        String filePath = uploadImageService.uploadLogo(file, nomeEmpresa);
+        empresaRepository.save(new Empresa(filePath, nomeEmpresa, dto.cnpj(), dto.descricao().trim()));
     }
 
     public Empresa getEmpresa(long empresaId) {
@@ -83,5 +89,13 @@ public class EmpresaService {
         var empresa = getEmpresa(empresaId);
         empresa.setAtivo(!empresa.isAtivo());
         empresaRepository.save(empresa);
+    }
+
+    private void validateInputs(Empresa empresa, String nome) {
+        if (empresa.getNome().equals(nome)) {
+            throw new ValidationException("Este nome já foi registrado");
+        } else {
+            throw new ValidationException("Este CNPJ já foi registrado");
+        }
     }
 }

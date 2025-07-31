@@ -662,13 +662,47 @@ nav {
 }
 
 .modalEmpresa__button-confirmar {
+    position: relative;
+    overflow: hidden;
     background-color: var(--azul-prefeitura);
-    color: var(--branco-padrao-80);
+    color: var(--branco-padrao);
     border: none;
+    font-weight: bolder;
 }
 
-.modalEmpresa__button-confirmar:hover {
+.modalEmpresa__button-confirmar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: var(--bs-success);
+    z-index: 0;
+    transition: width 0.5s ease;
+}
+
+.modalEmpresa__button-confirmar span {
+    position: relative;
+    z-index: 1;
+}
+
+.filled::before {
     color: var(--branco-padrao);
+    width: 100%;
+}
+
+.process-text {
+    display: none;
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.process-text.visible {
+    display: inline;
+    opacity: 1;
 }
 
 .modalEmpresa__preview-container {
@@ -696,7 +730,6 @@ nav {
     height: 45%;
     border-radius: 24px 24px 0 0;
 }
-
 
 .modalEmpresa__card-content {
     display: flex;
@@ -739,7 +772,7 @@ nav {
     background-color: var(--preto-padrao-9);
 }
 
-.image-not-valid {
+.input-error {
     border: 1px solid var(--container-vermelho-75);
 }
 
@@ -950,4 +983,3 @@ nav {
     font-size: 1.2rem;
     text-align: center;
 }
-
