@@ -73,7 +73,8 @@ public class EmpresaService {
     }
 
     public List<Empresa> getAll() {
-        Sort sort = Sort.by("nome").ascending();
+        Sort sort = Sort.by("ativo").ascending().and(
+                Sort.by("nome").ascending());
         return empresaRepository.findAll(sort);
     }
 
