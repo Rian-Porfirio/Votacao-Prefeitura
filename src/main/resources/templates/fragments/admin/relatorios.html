@@ -19,11 +19,7 @@
                 categories: categorias
               },
               series: {
-                data: [
-                  980, 950, 920, 880, 850,
-                  820, 790, 760, 730, 700,
-                  670, 640, 610, 580, 550
-                ],
+                data: dados,
               }
             });
           },
@@ -33,11 +29,7 @@
                 categories: categorias
               },
               series: {
-                data: [
-                  980, 950, 920, 880, 850,
-                  820, 790, 760, 730, 700,
-                  670, 640, 610, 580, 550
-                ],
+                data: dados,
               }
             });
           }
@@ -128,11 +120,7 @@
         name: 'Votos',
         borderRadius: 5,
         colorByPoint: true,
-        data: [
-          980, 950, 920, 880, 850,
-          820, 790, 760, 730, 700,
-          670, 640, 610, 580, 550
-        ],
+        data: dados,
         showInLegend: false
       }]
     });
@@ -185,6 +173,11 @@
           <div>
             <form th:action="@{/relatorio/geral}" method="GET">
               <button class="dataTable__button">Relatório Geral</button>
+            </form>
+          </div>
+          <div>
+            <form th:action="@{/gerarVotos}" method="POST">
+              <button class="dataTable__button">Gerar Votos</button>
             </form>
           </div>
         </div>

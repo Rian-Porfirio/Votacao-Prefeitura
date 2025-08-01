@@ -14,6 +14,7 @@ public interface IFuncionarioRepository extends JpaRepository<Funcionario, Long>
     List<Funcionario> findBySenhaIsNullOrVinculoIgnoreCase(String vinculo);
     List<Funcionario> findBySenhaIsNullAndVinculoNotIgnoreCase(String vinculo);
     List<Funcionario> findBySenhaIsNotNullAndVinculoNotIgnoreCase(String vinculo);
+    List<Funcionario> findByEmpresaIsNullAndVinculoNotIgnoreCase(String vinculo);
 
     Page<Funcionario> findBySenhaIsNotNullAndVinculoNotIgnoreCase(String vinculo, Pageable pageable); //aptos
     Page<Funcionario> findBySenhaIsNullOrVinculoIgnoreCase(String vinculo, Pageable pageable); //inaptos
