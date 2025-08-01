@@ -1,125 +1,134 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="https://www.thymeleaf.org/extras/spring-security" class="html-body-conf">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security" class="html">
 <head th:replace="~{fragments/head::head}"></head>
-<body class="html-body-conf body">
+<body class="body">
 <header class="header">
-  <img th:src="@{/assets/images/brasao_itapura.png}" alt="Logo Institucional" class="header__icon" />
-  <div class="header__container">
-    <div class="header__logo">
-      <h1 class="header__title">Sistema de Votação - Fornecedores de Benefícios</h1>
-    </div>
-    <p class="header__subtitle">Escolha seu fornecedor de vale alimentação entre as empresas participantes.</p>
-    <span class="header__badge">
+    <img th:src="@{/assets/images/brasao_itapura.png}" alt="Logo Institucional" class="header__icon"/>
+    <div class="header__container">
+        <div class="header__logo">
+            <h1 class="header__title">Sistema de Votação - Fornecedores de Benefícios</h1>
+        </div>
+        <p class="header__subtitle">Escolha seu fornecedor de vale alimentação entre as empresas participantes.</p>
+        <span class="header__badge">
       <span th:if="${empresas.size() == 0}">Não há</span>
       <span th:if="${empresas.size() > 0}" th:text="${empresas.size()}"></span>
       Fornecedores Participantes
     </span>
-  </div>
+    </div>
 </header>
 
 <main class="main">
-  <div class="instructions">
-    <p><strong>Instruções:</strong> Os fornecedores são apresentados em ordem alfabética. Você pode votar apenas uma vez em cada empresa. O sistema registra os votos automaticamente.</p>
-  </div>
-  <section class="main__top">
-    <h2 class="main__title">Fornecedores de Vale Alimentação</h2>
-    <a href="/dashboard/empresas" class="main__dashboard-button" sec:authorize="hasRole('ADMIN')"><i class="bi bi-graph-up-arrow"></i> Dashboard</a>
-  </section>
-
-  <section class="companies">
-    <div th:each="empresa : ${empresas}">
-      <div th:replace="~{/fragments/card :: card(empresa=${empresa}, hasVoted=${hasVoted})}"></div>
+    <div class="instructions">
+        <p><strong>Instruções:</strong> Os fornecedores são apresentados em ordem alfabética. Você pode votar apenas uma
+            vez. Seu voto será registrado automaticamente. O sistema continua disponível após votar.</p>
     </div>
-  </section>
+    <section class="main__top">
+        <h2 class="main__title">Fornecedores de Vale Alimentação</h2>
+        <a href="/dashboard/empresas" class="main__dashboard-button" sec:authorize="hasRole('ADMIN')"><i
+                class="bi bi-graph-up-arrow"></i> Dashboard</a>
+    </section>
+
+    <section class="companies">
+        <div th:each="empresa : ${empresas}">
+            <div th:replace="~{/fragments/card :: card(empresa=${empresa}, hasVoted=${hasVoted})}"></div>
+        </div>
+        <p th:if="${empresas.size() == 0}" class="sem-empresas">Ainda Não Há Fornecedores a Serem Mostrados</p>
+    </section>
 </main>
 
 <footer class="footer">
-  <div class="footer__container">
-    <div class="footer__info">
-      <div class="footer__logo">
-        <img th:src="@{/assets/images/brasao_itapura.png}" alt="Logo" class="footer__icon" />
-        <span class="footer__text">Sistema de Votação - Fornecedores de Benefícios</span>
-      </div>
-      <p class="footer__copyright">
-        © 2025 Sistema de Votação - Desenvolvido por Rian Porfírio
-        <i><a href="https://www.linkedin.com/in/rian-porfírio" target="_blank" class="footer__link">linkedIn</a></i>
-        <i><a href="mailto:rianporfiriodev@gmail.com" target="_blank" class="footer__link">e-mail</a></i>.
-      </p>
-      <div class="footer__contact">
-        <img th:src="@{/assets/images/mail.png}" alt="Email" class="footer__mail-icon" />
-        <span>Para dúvidas sobre a votação, entre em contato com o departamento de RH.</span>
-      </div>
+    <div class="footer__container">
+        <div class="footer__info">
+            <div class="footer__logo">
+                <img th:src="@{/assets/images/brasao_itapura.png}" alt="Logo" class="footer__icon"/>
+                <span class="footer__text">Sistema de Votação - Fornecedores de Benefícios</span>
+            </div>
+            <p class="footer__copyright">
+                © 2025 Sistema de Votação - Desenvolvido por Rian Porfírio
+                <i><a href="https://www.linkedin.com/in/rian-porfírio" target="_blank" class="footer__link">linkedIn</a></i>
+                <i><a href="mailto:rianporfiriodev@gmail.com" target="_blank" class="footer__link">e-mail</a></i>.
+            </p>
+            <div class="footer__contact">
+                <img th:src="@{/assets/images/mail.png}" alt="Email" class="footer__mail-icon"/>
+                <span>Para dúvidas sobre a votação, entre em contato com o departamento de RH.</span>
+            </div>
+        </div>
     </div>
-  </div>
 </footer>
 
-<div class="modal fade" id="modalInformativeToggle" aria-hidden="true" aria-labelledby="modalInformativeToggleLabel" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header justify-content-center bg-light">
-        <div class="w-100 text-center">
-          <i class="bi bi-exclamation-circle fs-1"></i>
-          <p class="modal-title fs-3 fw-semibold">Leia com Atenção</p>
-        </div>
-      </div>
-      <div class="modal-body text-center">
+<div class="modal fade" id="modalInformativeToggle" aria-hidden="true" aria-labelledby="modalInformativeToggleLabel"
+     tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center bg-light">
+                <div class="w-100 text-center">
+                    <i class="bi bi-exclamation-circle fs-1"></i>
+                    <p class="modal-title fs-3 fw-semibold">Leia com Atenção</p>
+                </div>
+            </div>
+            <div class="modal-body text-center">
 
-        <div class="alert alert-light" role="alert">
-          Ao confirmar o seu voto, você estará a concordar que a empresa <span id="nomeEmpresaModal" class="fw-semibold fst-italic">Nome da Empresa</span> será a provedora do
-          seu vale-alimentação.
+                <div class="alert alert-light" role="alert">
+                    Ao confirmar o seu voto, você estará a concordar que a empresa <span id="nomeEmpresaModal"
+                                                                                         class="fw-semibold fst-italic">Nome da Empresa</span>
+                    será a provedora do
+                    seu vale-alimentação.
+                </div>
+                <p class="fst-italic fw-lighter">
+                    Seu voto não poderá ser alterado
+                </p>
+                <form method="post" th:action="@{/votar}" id="confirm">
+                    <input type="text" hidden id="confirmInput" name="empresaId"/>
+                    <button type="submit" class="btn btn-dark w-50">Confirmar Voto</button>
+                </form>
+            </div>
         </div>
-        <p class="fst-italic fw-lighter">
-          Seu voto não poderá ser alterado
-        </p>
-          <form method="post" th:action="@{/votar}" id="confirm">
-            <input type="text" hidden id="confirmInput" name="empresaId" />
-            <button type="submit" class="btn btn-dark w-50">Confirmar Voto</button>
-          </form>
-      </div>
     </div>
-  </div>
 </div>
 
-<div class="modal fade" id="modalSuccessToggle" aria-hidden="true" aria-labelledby="modalSuccessToggleLabel" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header justify-content-center bg-success">
-        <div class="w-100 text-center">
-          <i class="bi bi-check-circle fs-1 text-white"></i>
-          <p class="modal-title fs-3 fw-semibold text-white" id="modalSuccessToggleLabel">Parabéns! Voto Confirmado!</p>
-        </div>
-      </div>
-      <div class="modal-body text-center">
-        <div class="alert alert-info fw-semibold" role="alert">
-          Caso a empresa recuse a proposta, haverá uma segunda votação ou seu voto será transferido para uma das empresas
-          mais votadas.
-        </div>
+<div class="modal fade" id="modalSuccessToggle" aria-hidden="true" aria-labelledby="modalSuccessToggleLabel"
+     tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center bg-success">
+                <div class="w-100 text-center">
+                    <i class="bi bi-check-circle fs-1 text-white"></i>
+                    <p class="modal-title fs-3 fw-semibold text-white" id="modalSuccessToggleLabel">Parabéns! Voto
+                        Confirmado!</p>
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <div class="alert alert-info fw-semibold" role="alert">
+                    Caso a empresa recuse a proposta, haverá uma segunda votação ou seu voto será transferido para uma
+                    das empresas
+                    mais votadas.
+                </div>
 
-        <p class="fst-italic fw-light">
-          Para mais informações, entre em contato com o setor de licitações.
-        </p>
+                <p class="fst-italic fw-light">
+                    Para mais informações, entre em contato com o setor de licitações.
+                </p>
 
-        <button class="btn btn-success w-50" data-bs-toggle="modal">Ok</button>
-      </div>
+                <button class="btn btn-success w-50" data-bs-toggle="modal">Ok</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="modal fade" id="modalErrorToggle" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white justify-content-center">
-        <div class="w-100 text-center">
-          <i class="bi bi-x-circle fs-1 text-white"></i>
-          <p class="modal-title fs-3 fw-semibold text-white">Essa não! Algo deu errado!</p>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white justify-content-center">
+                <div class="w-100 text-center">
+                    <i class="bi bi-x-circle fs-1 text-white"></i>
+                    <p class="modal-title fs-3 fw-semibold text-white">Essa não! Algo deu errado!</p>
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <p id="errorModalMessage" class="fw-bolder"></p>
+                <button class="btn btn-danger w-50" data-bs-toggle="modal">Compreendo</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-body text-center">
-        <p id="errorModalMessage" class="fw-bolder"></p>
-        <button class="btn btn-danger w-50" data-bs-toggle="modal">Compreendo</button>
-      </div>
     </div>
-  </div>
 </div>
 
 <script th:src="@{/assets/js/home/home.js}" defer></script>
