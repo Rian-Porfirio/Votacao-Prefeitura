@@ -2,10 +2,7 @@ package br.com.rianporfirio.sistemavotacao.domain;
 
 import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -37,6 +34,7 @@ public class Empresa {
     private String descricao;
     private boolean ativo;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)
     private List<Funcionario> funcionarios;
 
