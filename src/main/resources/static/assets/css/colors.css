@@ -1,0 +1,20 @@
+:root {
+    --azul-prefeitura: #0073C9;
+    --azul-escuro-prefeitura: #104072;
+    --preto-padrao: #000;
+    --preto-padrao-9: #00000016;
+    --preto-padrao-50: rgba(0, 0, 0, 0.6);
+    --cor-de-fundo: #EAEAEA;
+    --branco-padrao: #fff;
+    --branco-padrao-80: #FFFFFFCC;
+    --branco-variante-II: #DFE3E8;
+    --branco-variante-III: #ced4da;
+    --fonte-verde-80: #004E00;
+    --container-verde-85: #A8FFB8;
+    --fonte-vermelho-escuro: #4E0000;
+    --container-vermelho-75: #FF8888;
+    --azul-cadastrados: #228be6;
+    --amarelo-aptos: #fab005;
+    --vermelho-inaptos: #fa5252;
+    --laranja-senha: #fd7e14;
+}

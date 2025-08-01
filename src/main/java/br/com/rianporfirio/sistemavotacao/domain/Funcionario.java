@@ -18,7 +18,6 @@ import java.util.List;
 @Builder
 @Entity
 public class Funcionario implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -39,6 +38,10 @@ public class Funcionario implements UserDetails {
 
     public void votar(Empresa empresa) {
         setEmpresa(empresa);
+    }
+
+    public boolean hasVoted() {
+        return empresa != null;
     }
 
     @Override
@@ -75,5 +78,4 @@ public class Funcionario implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
-
 }

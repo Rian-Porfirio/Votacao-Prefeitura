@@ -1,9 +1,159 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{dashboard}" lang="br">
+<script layout:fragment="scripts" th:inline="javascript">
+  /*<![CDATA[*/
+  document.addEventListener("DOMContentLoaded", function () {
+    Highcharts.chart('votosPorSemana', {
+      chart: {
+        type: 'column',
+      },
+      lang: {
+        viewFullscreen: "Tela Cheia",
+        printChart: "Imprimir Gráfico",
+        exitFullscreen: "Dados simples",
+        noData: "Ainda não há dados para realizar as análises"
+      },
+      noData: {
+        style: {
+          fontWeight: 'bold',
+          fontSize: '16px',
+          fontFamily: 'system-ui',
+          color: 'rgba(48,48,48,0.7)'
+        }
+      },
+      exporting: {
+        buttons: {
+          contextButton: {
+            menuItems: [
+              'viewFullscreen',
+              'printChart',
+              'separator',
+              'downloadPNG',
+              'downloadJPEG',
+              'downloadSVG',
+              'separator',
+              'downloadCSV',
+              'downloadXLS'
+            ]
+          }
+        }
+      },
+      title: {
+        text: 'Votos por Dia',
+      },
+      xAxis: {
+        categories: ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'],
+        crosshair: true,
+        accessibility: {
+          description: 'Dias da Semana'
+        },
+        labels: {
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      yAxis: {
+        title: {
+          enabled: false
+        },
+        labels: {
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      colors: [
+        '#104072',
+        '#194c82',
+        '#418cc5',
+        '#4ba8d6',
+        '#55c4e7',
+        '#61ccec',
+        '#6dd3f1',
+        '#79dbf6',
+        '#85e3fb',
+        '#91ebff',
+        '#a1efff',
+        '#b0f4ff'
+      ],
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0,
+          borderRadius: 7,
+        }
+      },
+      series: [
+        {
+          name: 'Votos',
+          colorByPoint: true,
+          data: [
+            980, 950, 920, 880, 850,
+          ]
+        },
+      ]
+    });
+  });
+  /*]]>*/
+</script>
 <body>
 <main layout:fragment="content">
-  <h1>Empresas</h1>
+  <div class="votacaoDash__segundo-grafico">
+    <figure class="highcharts-figure">
+      <div id="votosPorSemana">
+      </div>
+    </figure>
+  </div>
+  <div class="votacaoDash__table-usuarios" style="overflow: hidden">
+    <div class="dataTable__container">
+      <div class="dataTable__header">
+        <div class="dataTable__left-content">
+          <span>Lista de Votos</span>
+
+          <form method="get" th:action="@{/dashboard/votacao}">
+            <input class="form-control"
+                   type="search"
+                   placeholder="Pesquisar funcionário"
+                   name="search"
+                   th:value="${search}">
+
+            <input type="hidden" name="status" th:value="${status}" />
+          </form>
+
+        </div>
+        <div class="dataTable__right-content">
+          <span>Mostrar <i class="bi bi-caret-down"></i></span>
+          <span>Filtrar <i class="bi bi-filter"></i></span>
+        </div>
+      </div>
+      <table class="dataTable">
+        <thead class="dataTable__thead">
+        <tr>
+          <th>Matrícula</th>
+          <th>Nome</th>
+          <th style="width: 25%">Empresa Votada</th>
+          <th style="width: 15%">Data/Hora</th>
+        </tr>
+        </thead>
+        <tbody class="dataTable__body" style="height: 320px">
+        <tr th:each="voto : ${votos}">
+          <td th:text="${voto.funcionario.matricula}">-</td>
+          <td th:text="${voto.funcionario.nome}">-</td>
+          <td th:text="${voto.empresa.nome}" style="width: 25%; padding-left: 35px;">-</td>
+          <td style="width: 15%" th:text="${#temporals.format(voto.data, 'dd / MM / yyyy HH:mm')}">-</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </main>
 </body>
 </html>

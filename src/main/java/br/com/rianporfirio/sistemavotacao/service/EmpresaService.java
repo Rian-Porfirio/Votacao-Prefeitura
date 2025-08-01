@@ -7,6 +7,7 @@ import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,8 +29,14 @@ public class EmpresaService {
     }
 
     public void create(EmpresaDto dto, MultipartFile file) throws IOException {
-        String filePath = uploadImageService.uploadLogo(file, dto.nome());
-        empresaRepository.save(new Empresa(dto.nome(), filePath));
+        String nomeEmpresa = dto.nome().trim();
+        Empresa empresa = empresaRepository.findByNomeIgnoreCaseOrCnpj(nomeEmpresa, dto.cnpj());
+        if (empresa != null) {
+            validateInputs(empresa, nomeEmpresa);
+        }
+
+        String filePath = uploadImageService.uploadLogo(file, nomeEmpresa);
+        empresaRepository.save(new Empresa(filePath, nomeEmpresa, dto.cnpj(), dto.descricao().trim()));
     }
 
     public Empresa getEmpresa(long empresaId) {
@@ -51,17 +58,24 @@ public class EmpresaService {
     }
 
     public void update(EmpresaDto dto, long empresaId, MultipartFile file) throws IOException {
-        String filePath = uploadImageService.uploadLogo(file, dto.nome());
+        var empresa = getEmpresa(empresaId);
 
-        var opcao = getEmpresa(empresaId);
-        opcao.setNome(dto.nome());
-        opcao.setFilePath(filePath);
+        empresa.setNome(dto.nome());
+        empresa.setCnpj(dto.cnpj());
+        empresa.setDescricao(dto.descricao());
 
-        empresaRepository.save(opcao);
+        if (!file.isEmpty()) {
+            String filePath = uploadImageService.uploadLogo(file, dto.nome());
+            empresa.setFilePath(filePath);
+        }
+
+        empresaRepository.save(empresa);
     }
 
     public List<Empresa> getAll() {
-        return empresaRepository.findAll();
+        Sort sort = Sort.by("ativo").ascending().and(
+                Sort.by("nome").ascending());
+        return empresaRepository.findAll(sort);
     }
 
     public List<Funcionario> listFuncionarios(long empresaId) {
@@ -76,5 +90,13 @@ public class EmpresaService {
         var empresa = getEmpresa(empresaId);
         empresa.setAtivo(!empresa.isAtivo());
         empresaRepository.save(empresa);
+    }
+
+    private void validateInputs(Empresa empresa, String nome) {
+        if (empresa.getNome().equals(nome)) {
+            throw new ValidationException("Este nome já foi registrado");
+        } else {
+            throw new ValidationException("Este CNPJ já foi registrado");
+        }
     }
 }

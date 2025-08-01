@@ -2,10 +2,7 @@ package br.com.rianporfirio.sistemavotacao.domain;
 
 import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -20,8 +17,10 @@ public class Empresa {
         setNome(dto.nome());
     }
 
-    public Empresa(String nome, String filePath) {
+    public Empresa(String filePath, String nome, String cnpj, String descricao) {
         this.nome = nome;
+        this.cnpj = cnpj;
+        this.descricao = descricao;
         this.filePath = filePath;
     }
 
@@ -32,8 +31,10 @@ public class Empresa {
     private String filePath;
     private String nome;
     private String cnpj;
+    private String descricao;
     private boolean ativo;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "empresa", fetch = FetchType.EAGER)
     private List<Funcionario> funcionarios;
 

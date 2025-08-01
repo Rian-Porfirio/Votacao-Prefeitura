@@ -1,11 +1,11 @@
 package br.com.rianporfirio.sistemavotacao.web;
 import br.com.rianporfirio.sistemavotacao.service.MailSenderService;
 import br.com.rianporfirio.sistemavotacao.service.PasswordGenerationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
@@ -24,7 +24,9 @@ public class AuthController {
     }
 
     @PostMapping("/generate/password")
-    public void generatePassword(@ModelAttribute("matriculaSenha") String matricula) {
-        passwordGenerator.generatePassword(matricula);
+    @ResponseBody
+    public ResponseEntity<String> generatePassword(@ModelAttribute("matricula") String matricula, Model model) {
+        String password = passwordGenerator.generatePassword(matricula);
+        return ResponseEntity.ok(password);
     }
 }

@@ -1,6 +1,8 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
+import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,13 +25,15 @@ public class PasswordGenerationService {
     }
 
     public String generatePassword(String matricula) {
+        Funcionario funcionario = checkPermission(matricula);
+        
         String rawPassword = randomPassword();
         log.info("A senha gerada é: {}", rawPassword);
 
         String encodedPassword = encodePassword(rawPassword);
-        setEncodedPassword(matricula, encodedPassword);
+        setEncodedPassword(funcionario, encodedPassword);
 
-        return encodedPassword;
+        return rawPassword;
     }
 
     private String randomPassword() {
@@ -49,9 +53,16 @@ public class PasswordGenerationService {
         return passwordEncoder.encode(rawPassword);
     }
 
-    private void setEncodedPassword(String matricula, String encodedPassword) {
-        var funcionario = funcionarioRepository.findByMatricula(matricula);
+    private void setEncodedPassword(Funcionario funcionario, String encodedPassword) {
         funcionario.setSenha(encodedPassword);
         funcionarioRepository.save(funcionario);
+    }
+
+    private Funcionario checkPermission(String matricula) {
+        var funcionario = funcionarioRepository.findByMatricula(matricula);
+        if (funcionario.getVinculo().equalsIgnoreCase("estagiário")) {
+            throw new ValidationException("Usuário não permitido");
+        }
+        return funcionario;
     }
 }

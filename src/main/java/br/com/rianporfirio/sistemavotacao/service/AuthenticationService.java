@@ -23,7 +23,7 @@ public class AuthenticationService implements UserDetailsService {
 
         if (funcionario == null) {
             log.error("O usuário {} não foi encontrado", username);
-            throw new UsernameNotFoundException("Funcionário não encontrado");
+            throw new UsernameNotFoundException("Funcionário " + username + " não encontrado");
         }
 
         return funcionario;

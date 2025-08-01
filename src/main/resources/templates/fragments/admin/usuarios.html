@@ -1,9 +1,185 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{dashboard}" lang="br">
+<script layout:fragment="scripts" type="module" th:src="@{/assets/js/usuarios/main.js}"></script>
 <body>
 <main layout:fragment="content">
-    <h1>Empresas</h1>
+    <div class="usersDash__header-content">
+        <div class="userDash__information">
+            <div class="userDash__information-component" style="border-bottom: 6px solid var(--azul-cadastrados);">
+                <div>
+                    <img th:src="@{/assets/images/cadastrados.png}" alt="icone" class="userDash__information-image"/>
+                    <span>Usuários Cadastrados</span>
+                </div>
+                <div>
+                    <span th:text="${usuariosInfo.cadastrados}" class="userDash__information-number"></span>
+                    <span class="userDash__information-description">Cadastrados</span>
+                </div>
+            </div>
+            <div class="userDash__information-component" style="border-bottom: 6px solid var(--amarelo-aptos);">
+                <div>
+                    <img th:src="@{/assets/images/aptos.png}" alt="icone" class="userDash__information-image"/>
+                    <span>Usuários Aptos</span>
+                </div>
+                <div>
+                    <span th:text="${usuariosInfo.aptos}" class="userDash__information-number"></span>
+                    <span class="userDash__information-description">Aptos</span>
+                </div>
+            </div>
+            <div class="userDash__information-component" style="border-bottom: 6px solid var(--vermelho-inaptos)">
+                <div>
+                    <img th:src="@{/assets/images/inaptos.png}" alt="icone" class="userDash__information-image"/>
+                    <span>Usuários Ináptos</span>
+                </div>
+                <div>
+                    <span th:text="${usuariosInfo.inaptos}" class="userDash__information-number"></span>
+                    <span class="userDash__information-description">Ináptos</span>
+                </div>
+            </div>
+            <div class="userDash__information-component" style="border-bottom: 6px solid var(--laranja-senha);">
+                <div>
+                    <img th:src="@{/assets/images/semSenha.png}" alt="icone" class="userDash__information-image"/>
+                    <span>Usuários Sem Senha</span>
+                </div>
+                <div>
+                    <span th:text="${usuariosInfo.semSenha}" class="userDash__information-number"></span>
+                    <span class="userDash__information-description">Sem Senha</span>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 12px 0;">
+            <div class="userDash__filter">
+                <a th:href="@{/dashboard/usuarios(search=${search})}"
+                   class="userDash__filter-button"
+                   th:classappend="${status == null || status == ''} ? ' userDash__filter-button--active' : ''">Todos</a>
+
+                <a th:href="@{/dashboard/usuarios(search=${search}, status='aptos')}"
+                   class="userDash__filter-button"
+                   th:classappend="${status == 'aptos'} ? ' userDash__filter-button--active' : ''">Aptos</a>
+
+                <a th:href="@{/dashboard/usuarios(search=${search}, status='inaptos')}"
+                   class="userDash__filter-button"
+                   th:classappend="${status == 'inaptos'} ? ' userDash__filter-button--active' : ''">Ináptos</a>
+
+                <a th:href="@{/dashboard/usuarios(search=${search}, status='sem_senha')}"
+                   class="userDash__filter-button"
+                   th:classappend="${status == 'sem_senha'} ? ' userDash__filter-button--active' : ''">Sem Senha</a>
+
+                <a th:href="@{/dashboard/usuarios(search=${search}, status='nao_votou')}"
+                   class="userDash__filter-button"
+                   th:classappend="${status == 'nao_votou'} ? ' userDash__filter-button--active' : ''">Não Votou</a>
+            </div>
+        </div>
+    </div>
+    <div class="usersDash__bottom-content">
+        <div class="dataTable__container">
+            <div class="dataTable__header">
+                <div class="dataTable__left-content">
+                    <span>Lista de Usuários</span>
+
+                    <form method="get" th:action="@{/dashboard/usuarios}">
+                        <input class="form-control"
+                               type="search"
+                               placeholder="Pesquisar funcionário"
+                               name="search"
+                               th:value="${search}">
+
+                        <input type="hidden" name="status" th:value="${status}" />
+                    </form>
+
+                </div>
+                <div class="dataTable__right-content">
+                    <span>Mostrar <i class="bi bi-caret-down"></i></span>
+                    <span>Filtrar <i class="bi bi-filter"></i></span>
+                </div>
+            </div>
+            <table class="dataTable">
+                <thead class="dataTable__thead">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Vínculo</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody class="dataTable__body">
+                <tr th:if="${usuarios.size() > 0}" th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.matricula}"></td>
+                    <td th:text="${usuario.nome}"></td>
+                    <td th:text="${usuario.vinculo}"></td>
+                    <td>
+                        <div th:if="${usuario.senha != null}" class="dataTable__status dataTable__status--true">Apto</div>
+                        <div th:if="${usuario.senha == null}" class="dataTable__status dataTable__status--false">Inapto</div>
+                    </td>
+                    <td>
+                        <div class="dataTable__actions">
+                            <button th:if="${usuario.senha == null}" type="button" class="dataTable__action-button passwordGenButton" data-bs-toggle="modal" th:attr="data-bs-target='#modalPasswordGen', matricula=${usuario.matricula}">
+                                <i class="bi bi-unlock-fill"></i>
+                            </button>
+                            <i th:if="${usuario.senha != null}" class="bi bi-lock-fill" title="Usuário Já Possui Senha" style="cursor: help"></i>
+                            <button type="button" class="dataTable__action-button btn-delete-user" data-bs-toggle="modal" data-bs-target="#modalDelete" th:attr="data-user-id=${usuario.id}">
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+                <p th:if="${usuarios.size() == 0}" class="dataTable__no-users-message">Não há usuários a serem exibidos</p>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPasswordGen" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalPasswordGen" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="userDash__password-gen">
+                        <h6>Gerador de Senhas</h6>
+                        <div id="senhaGerada" class="userDash__password-output"></div>
+                        <p>A senha gerada será definitiva para o usuário, ou seja, ela deve ser guardada e em casos de REAL perda o administrador poderá consultar a senha para o usuário.</p>
+                        <form method="post" th:action="@{/generate/password}" id="formPasswordGen">
+                            <input name="matricula" id="matriculaInput" hidden/>
+                            <button
+                                type="submit"
+                                class="btn btn-primary userDash__button">
+                                Gerar Senha
+                            </button>
+                        </form>
+                        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example" style="margin-top: 1rem">
+        <ul class="pagination justify-content-center mb-0">
+
+            <li class="page-item user-select-none" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/dashboard/usuarios(page=${currentPage - 1}, search=${search}, status=${status})}"
+                   aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item user-select-none"
+                th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link"
+                   th:href="@{/dashboard/usuarios(page=${i}, search=${search}, status=${status})}"
+                   th:text="${i + 1}">1</a>
+            </li>
+
+            <li class="page-item user-select-none" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/dashboard/usuarios(page=${currentPage + 1}, search=${search}, status=${status})}"
+                   aria-label="Próximo">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </main>
 </body>
 </html>

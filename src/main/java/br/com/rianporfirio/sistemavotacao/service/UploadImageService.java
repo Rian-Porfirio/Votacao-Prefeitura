@@ -1,8 +1,7 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.impl.InvalidContentTypeException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,11 +23,11 @@ public class UploadImageService {
 
     public String uploadLogo(MultipartFile file, String name) throws IOException {
         if (file.isEmpty()) {
-            throw new FileUploadException("Arquivo de imagem não inserido");
+            throw new ValidationException("Arquivo não enviado");
         }
 
         if (!allowedMimeTypes.contains(file.getContentType())) {
-            throw new InvalidContentTypeException("Arquivo não permitido");
+            throw new ValidationException("Arquivo Não Suportado. Por favor, Envie Apenas PNG, JPG e JPEG .");
         }
 
         Path uploadPath = Paths.get(logosFolder, name);
