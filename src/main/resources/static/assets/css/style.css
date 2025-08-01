@@ -865,6 +865,7 @@ nav {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-top: 1rem;
     gap: 1rem;
 }
 
@@ -876,7 +877,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bolder;
     width: 90%;
     min-height: 110px;
@@ -896,7 +897,7 @@ nav {
 
 .userDash__password-gen form button {
     width: 100%;
-    padding: 10px 5px;
+    padding: 10px;
 }
 
 .votacaoDash__header-content {

@@ -114,10 +114,10 @@
                     </td>
                     <td>
                         <div class="dataTable__actions">
-                            <button type="button" class="dataTable__action-button passwordGenButton" data-bs-toggle="modal" th:attr="data-bs-target='#modalPasswordGen', matricula=${usuario.matricula}">
-                                <i th:if="${usuario.senha == null}" class="bi bi-unlock-fill"></i>
-                                <i th:if="${usuario.senha != null}" class="bi bi-lock-fill"></i>
+                            <button th:if="${usuario.senha == null}" type="button" class="dataTable__action-button passwordGenButton" data-bs-toggle="modal" th:attr="data-bs-target='#modalPasswordGen', matricula=${usuario.matricula}">
+                                <i class="bi bi-unlock-fill"></i>
                             </button>
+                            <i th:if="${usuario.senha != null}" class="bi bi-lock-fill" title="Usuário Já Possui Senha" style="cursor: help"></i>
                             <button type="button" class="dataTable__action-button btn-delete-user" data-bs-toggle="modal" data-bs-target="#modalDelete" th:attr="data-user-id=${usuario.id}">
                                 <i class="bi bi-box-arrow-up-right"></i>
                             </button>
@@ -134,7 +134,6 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="userDash__password-gen">
                         <h6>Gerador de Senhas</h6>
                         <div id="senhaGerada" class="userDash__password-output"></div>
@@ -147,6 +146,7 @@
                                 Gerar Senha
                             </button>
                         </form>
+                        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
                     </div>
                 </div>
             </div>
