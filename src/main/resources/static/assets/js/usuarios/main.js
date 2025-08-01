@@ -6,23 +6,26 @@ document.querySelectorAll('.passwordGenButton').forEach(btn => {
     })
 })
 
-document.getElementById('formPasswordGen').addEventListener('submit', (e) => {
+document.getElementById('formPasswordGen').addEventListener('submit', async (e) => {
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
 
-    fetch('/generate/password', {
+    const outputSenha = document.getElementById('senhaGerada');
+
+    const response = await fetch('/generate/password', {
         method: 'POST',
         body: formData
-    })
-        .then(response => {
-            if (!response.ok) throw new Error('Erro na requisição');
-            return response.text();
-        })
-        .then(generatedPassword => {
-            document.getElementById('senhaGerada').textContent = generatedPassword;
-        })
-        .catch(error => console.error('Erro:', error));
+    });
+
+    const responseText = await response.text();
+
+    if (!response.ok) {
+        outputSenha.textContent = responseText;
+        return;
+    }
+
+    outputSenha.textContent = responseText;
 
 });
 

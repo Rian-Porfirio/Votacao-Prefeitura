@@ -26,11 +26,7 @@ public class AuthController {
     @PostMapping("/generate/password")
     @ResponseBody
     public ResponseEntity<String> generatePassword(@ModelAttribute("matricula") String matricula, Model model) {
-        try {
-            String password = passwordGenerator.generatePassword(matricula);
-            return ResponseEntity.ok(password);
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
-        }
+        String password = passwordGenerator.generatePassword(matricula);
+        return ResponseEntity.ok(password);
     }
 }
