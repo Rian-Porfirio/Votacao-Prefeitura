@@ -73,14 +73,17 @@
         <div class="modal fade" th:id="'modalDelete' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header fs-3">
-                        Deseja realmente excluir esta opção ?
-                    </div>
-                    <div class="modal-footer">
-                        <form th:action="@{/delete/{id}(id=${empresa.getId()})}" method="post">
-                            <button type="submit" class="btn btn-danger">Excluir</button>
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                        </form>
+                    <div class="modal-body modal-delete">
+                        <h4>Excluir Empresa?</h4>
+                        <div>
+                            <p>Ao excluir a empresa, todos os usuários relacionados a ela terão seus <strong>votos removidos</strong>.</p>
+                        </div>
+                        <div class="modal-delete__botoes">
+                            <form th:action="@{/delete/{id}(id=${empresa.getId()})}" method="post">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Excluir</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
