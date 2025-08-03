@@ -1,3 +1,9 @@
+const nomeInfo = document.getElementById('nomeInfo');
+const matriculaInfo = document.getElementById('matriculaInfo');
+const vinculoInfo = document.getElementById('vinculoInfo');
+const cargoInfo = document.getElementById('cargoInfo');
+const localInfo = document.getElementById('localInfo');
+const lotacaoInfo = document.getElementById('lotacaoInfo');
 
 document.querySelectorAll('.passwordGenButton').forEach(btn => {
     btn.addEventListener('click', () => {
