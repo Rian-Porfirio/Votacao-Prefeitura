@@ -28,12 +28,12 @@
             </div>
             <div class="userDash__information-component" style="border-bottom: 6px solid var(--vermelho-inaptos)">
                 <div>
-                    <img th:src="@{/assets/images/inaptos.png}" alt="icone" class="userDash__information-image"/>
-                    <span>Usuários Ináptos</span>
+                    <img th:src="@{/assets/images/semVoto.png}" alt="icone" class="userDash__information-image"/>
+                    <span>Usuários Sem Voto</span>
                 </div>
                 <div>
-                    <span th:text="${usuariosInfo.inaptos}" class="userDash__information-number"></span>
-                    <span class="userDash__information-description">Ináptos</span>
+                    <span th:text="${usuariosInfo.noVotes}" class="userDash__information-number"></span>
+                    <span class="userDash__information-description">Sem Voto</span>
                 </div>
             </div>
             <div class="userDash__information-component" style="border-bottom: 6px solid var(--laranja-senha);">

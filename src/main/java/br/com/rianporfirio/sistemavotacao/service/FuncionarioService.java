@@ -7,6 +7,7 @@ import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegistered
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IVotoRepository;
+import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -50,15 +51,15 @@ public class FuncionarioService {
 
     public FuncionarioInfoDto loadInformation() {
         int semSenha = loadAllSemSenha().size();
-        int inaptos = loadAllInaptos().size();
+        int noVotes = loadAllNoVotes().size();
         int cadastrados = getAll().size();
         int aptos = loadAllAptos().size();
 
-        return new FuncionarioInfoDto(cadastrados, aptos, inaptos, semSenha);
+        return new FuncionarioInfoDto(cadastrados, aptos, noVotes, semSenha);
     }
 
-    public List<Funcionario> loadAllInaptos() {
-        return funcionarioRepository.findBySenhaIsNullOrVinculoIgnoreCase(vinculo);
+    public List<Funcionario> loadAllNoVotes() {
+        return funcionarioRepository.findByEmpresaIsNullAndVinculoNotIgnoreCase(vinculo);
     }
 
     public List<Funcionario> loadAllSemSenha() {
