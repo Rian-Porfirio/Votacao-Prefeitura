@@ -113,12 +113,12 @@
                         <div th:if="${usuario.senha == null}" class="dataTable__status dataTable__status--false">Inapto</div>
                     </td>
                     <td>
-                        <div class="dataTable__actions">
-                            <button th:if="${usuario.senha == null}" type="button" class="dataTable__action-button passwordGenButton" data-bs-toggle="modal" th:attr="data-bs-target='#modalPasswordGen', matricula=${usuario.matricula}">
+                        <div class="dataTable__actions" th:attr="matricula=${usuario.matricula}">
+                            <button th:if="${usuario.senha == null}" type="button" class="dataTable__action-button passwordGenButton" data-bs-toggle="modal" th:attr="data-bs-target='#modalPasswordGen'">
                                 <i class="bi bi-unlock-fill"></i>
                             </button>
                             <i th:if="${usuario.senha != null}" class="bi bi-lock-fill" title="Usuário Já Possui Senha" style="cursor: help"></i>
-                            <button type="button" class="dataTable__action-button btn-delete-user" data-bs-toggle="modal" data-bs-target="#modalDelete" th:attr="data-user-id=${usuario.id}">
+                            <button type="button" class="dataTable__action-button user-information" data-bs-toggle="modal" data-bs-target="#modalInformation">
                                 <i class="bi bi-box-arrow-up-right"></i>
                             </button>
                         </div>
@@ -152,6 +152,47 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalInformation" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-information__header">
+                    <button type="button" class="btn-close button-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <img th:src="@{/assets/images/brasao_itapura.png}" class="modal-information__logo"/>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-information__container">
+                        <div>
+                            <p class="modal-information__label">Nome</p>
+                            <div class="modal-information__input" id="nomeInfo"></div>
+                        </div>
+                        <div class="modal-information__dual-info">
+                            <div style="width: 45%">
+                                <p class="modal-information__label">Matrícula</p>
+                                <div class="modal-information__input" id="matriculaInfo"></div>
+                            </div>
+                            <div style="width: 55%">
+                                <p class="modal-information__label">Vínculo</p>
+                                <div class="modal-information__input" id="vinculoInfo"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="modal-information__label">Cargo</p>
+                            <div class="modal-information__input" id="cargoInfo"></div>
+                        </div>
+                        <div>
+                            <p class="modal-information__label">Local de Trabalho</p>
+                            <div class="modal-information__input" id="localInfo"></div>
+                        </div>
+                        <div>
+                            <p class="modal-information__label">Lotação</p>
+                            <div class="modal-information__input" id="lotacaoInfo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav aria-label="Page navigation example" style="margin-top: 1rem">
         <ul class="pagination justify-content-center mb-0">
 
@@ -180,6 +221,26 @@
             </li>
         </ul>
     </nav>
+    <script th:inline="javascript">
+        let usuarios = /*[[${usersDto}]]*/ [];
+
+        document.querySelectorAll(".user-information").forEach(btn => {
+            btn.addEventListener('click', () => {
+                const matricula = btn.parentElement.getAttribute('matricula');
+                const usuario = usuarios.find(user => user.matricula === matricula);
+                if (usuario) {
+                    nomeInfo.textContent = usuario.nome;
+                    matriculaInfo.textContent = usuario.matricula;
+                    vinculoInfo.textContent = usuario.vinculo;
+                    cargoInfo.textContent = usuario.cargo;
+                    localInfo.textContent = usuario.localDeTrabalho;
+                    lotacaoInfo.textContent = usuario.lotacao;
+                } else {
+                    alert("Houve um erro ao acessar as informações do usuário");
+                }
+            });
+        });
+    </script>
 </main>
 </body>
 </html>

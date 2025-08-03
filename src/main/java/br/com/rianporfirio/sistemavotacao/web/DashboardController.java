@@ -4,6 +4,7 @@ import br.com.rianporfirio.sistemavotacao.domain.Empresa;
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
 import br.com.rianporfirio.sistemavotacao.dto.RankingVotosDto;
+import br.com.rianporfirio.sistemavotacao.dto.UsuariosDto;
 import br.com.rianporfirio.sistemavotacao.repository.IVotoRepository;
 import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import br.com.rianporfirio.sistemavotacao.service.FuncionarioService;
@@ -63,8 +64,10 @@ public class DashboardController {
         getCurrentPath(model, req);
 
         Page<Funcionario> funcionarios = funcionarioService.loadPages(search, status, page);
+        List<UsuariosDto> usersDto = funcionarios.getContent().stream().map(UsuariosDto::new).toList();
 
         model.addAttribute("usuarios", funcionarios.getContent());
+        model.addAttribute("usersDto", usersDto);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", funcionarios.getTotalPages());
         model.addAttribute("status", status);
