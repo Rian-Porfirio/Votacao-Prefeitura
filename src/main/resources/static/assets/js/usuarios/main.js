@@ -1,10 +1,10 @@
 
 document.querySelectorAll('.passwordGenButton').forEach(btn => {
     btn.addEventListener('click', () => {
-        const input = document.getElementById('matriculaInput')
-        input.value = btn.getAttribute('matricula');
-    })
-})
+        const input = document.getElementById('matriculaInput');
+        input.value = getMatricula(btn);
+    });
+});
 
 document.getElementById('formPasswordGen').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -29,6 +29,6 @@ document.getElementById('formPasswordGen').addEventListener('submit', async (e) 
 
 });
 
-document.getElementById('modalPasswordGen').addEventListener('hidden.bs.modal', () => {
-    document.activeElement.blur()
-});
+function getMatricula(btn) {
+    return btn.parentElement.getAttribute("matricula");
+}

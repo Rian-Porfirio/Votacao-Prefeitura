@@ -994,3 +994,57 @@ nav {
 .modal-delete__botoes {
     justify-items: flex-end;
 }
+
+.modal-information__header {
+    position: relative;
+    height: 120px;
+    background-color: var(--azul-prefeitura);
+}
+
+.modal-information__logo {
+    position: absolute;
+    width: 90px;
+    bottom: -30%;
+    left: 41%;
+}
+
+.modal-information__container {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0.6rem 2.5rem 0.6rem;
+    gap: 1rem;
+}
+
+.modal-information__label{
+    margin-bottom: 2px;
+    font-size: 0.85rem;
+    user-select: none;
+    font-weight: bolder;
+}
+
+.modal-information__input {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--preto-padrao-30);
+    border-radius: 3px;
+    height: 40px;
+    padding: 0.3rem;
+    font-size: 0.85rem;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.modal-information__hide {
+    cursor: pointer;
+}
+
+.button-close {
+    position: absolute;
+    left: 93%;
+    bottom: 78%;
+}
+
+.modal-information__dual-info {
+    display: flex;
+    gap: 1rem;
+}
