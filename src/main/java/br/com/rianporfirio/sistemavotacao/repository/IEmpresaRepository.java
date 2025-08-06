@@ -12,6 +12,6 @@ public interface IEmpresaRepository extends JpaRepository<Empresa, Long> {
     Empresa findByNome(String nome);
     Empresa findByCnpj(String cnpj);
 
-    @Query("SELECT e FROM Empresa e LEFT JOIN e.funcionarios f GROUP BY e ORDER BY COUNT(f) ASC LIMIT 1")
-    Empresa findLessVoted();
+    @Query("SELECT e FROM Empresa e LEFT JOIN e.funcionarios f GROUP BY e ORDER BY COUNT(f) DESC LIMIT 1")
+    Empresa findMostVoted();
 }
