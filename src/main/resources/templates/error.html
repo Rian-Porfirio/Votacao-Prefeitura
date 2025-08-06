@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="shortcut icon" th:href="@{/assets/images/error.png}" type="image/x-icon" />
+    <title>Essa não! Um erro!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/assets/css/error.css}" />
+</head>
+<body>
+<div class="container">
+    <img class="error__icon" th:src="@{/assets/images/brasao_itapura.png}" alt="logo"/>
+    <h1 class="error__code" th:text="${statusCode == null} ? '404' : ${statusCode}">404</h1>
+    <h2 class="error__info">Oops! Parece que algo deu errado...</h2>
+    <p class="error__message">A página que você está procurando pode ter sido removida, renomeada, bloqueada ou está temporariamente indisponível.</p>
+    <button onclick="history.back()" class="error__button">Voltar para onde estava</button>
+</div>
+</body>
+</html>

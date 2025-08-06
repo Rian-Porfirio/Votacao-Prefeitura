@@ -33,6 +33,7 @@ public class SpringSecurityConfig {
                                 "/delete/*",
                                 "/create",
                                 "/dashboard/*").hasRole("ADMIN")
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
