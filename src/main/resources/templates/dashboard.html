@@ -61,14 +61,16 @@
                     </div>
                 </div>
                 <div class="modal-body text-center">
-                    <p id="errorModalMessage" class="fw-bolder"></p>
+                    <div class="alert alert-danger fw-semibold" role="alert" id="errorModalMessage">
+                    </div>
                     <button class="btn btn-danger w-50" data-bs-toggle="modal">Compreendo</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalSuccessToggle" aria-hidden="true" aria-labelledby="modalSuccessToggleLabel" tabindex="-1">
+    <div class="modal fade" id="modalSuccessToggle" aria-hidden="true" aria-labelledby="modalSuccessToggleLabel"
+         tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header justify-content-center bg-success">
@@ -78,8 +80,10 @@
                     </div>
                 </div>
                 <div class="modal-body text-center">
-                    <div class="fw-semibold" role="alert" id="successMessage">
+                    <div class="alert alert-info fw-semibold" role="alert" id="successMessage">
                     </div>
+                    <p class="fst-italic fw-light" id="informativeMessage">
+                    </p>
                     <button class="btn btn-success w-50" data-bs-toggle="modal">Ok</button>
                 </div>
             </div>

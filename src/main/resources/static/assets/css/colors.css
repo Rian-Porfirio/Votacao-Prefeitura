@@ -1,6 +1,8 @@
 :root {
     --azul-prefeitura: #0073C9;
     --azul-escuro-prefeitura: #104072;
+    --azul-info: #00a4cb;
+    --azul-info-hover: #0188a6;
     --preto-padrao: #000;
     --preto-padrao-9: #00000016;
     --preto-padrao-50: rgba(0, 0, 0, 0.6);

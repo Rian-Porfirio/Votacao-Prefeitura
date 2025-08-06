@@ -1,151 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{dashboard}" lang="br">
-<script layout:fragment="scripts" th:inline="javascript">
-  /*<![CDATA[*/
-  document.addEventListener("DOMContentLoaded", function () {
-    const empresasTopFive = /*[[${empresasTopFive}]]*/[];
-    const dadosTopFive = /*[[${dadosTopFive}]]*/[];
-
-    const categorias = /*[[${empresasRanking}]]*/ [];
-    const dados = /*[[${votosRanking}]]*/ [];
-
-    const chart = Highcharts.chart('votos', {
-      chart: {
-        events: {
-          fullscreenOpen: function () {
-            this.update({
-              xAxis: {
-                categories: categorias
-              },
-              series: {
-                data: dados,
-              }
-            });
-          },
-          fullscreenClose: function () {
-            this.update({
-              xAxis: {
-                categories: categorias
-              },
-              series: {
-                data: dados,
-              }
-            });
-          }
-        },
-        inverted: true
-      },
-      lang: {
-        viewFullscreen: "Dados Completos",
-        printChart: "Imprimir Gráfico",
-        exitFullscreen: "Dados simples",
-        noData: "Ainda não há dados para realizar as análises"
-      },
-      noData: {
-        style: {
-          fontWeight: 'bold',
-          fontSize: '16px',
-          fontFamily: 'system-ui',
-          color: 'rgba(48,48,48,0.7)'
-        }
-      },
-      exporting: {
-        buttons: {
-          contextButton: {
-            menuItems: [
-                  'viewFullscreen',
-                  'printChart',
-                  'separator',
-                  'downloadPNG',
-                  'downloadJPEG',
-                  'downloadSVG',
-                  'separator',
-                  'downloadCSV',
-                  'downloadXLS'
-            ]
-          }
-        }
-      },
-      title: {
-        text: 'Votos por empresa'
-      },
-      credits: {
-        enabled: false
-      },
-      colors: [
-        '#104072',
-        '#194c82',
-        '#235893',
-        '#2d64a4',
-        '#3770b5',
-        '#418cc5',
-        '#4ba8d6',
-        '#55c4e7',
-        '#61ccec',
-        '#6dd3f1',
-        '#79dbf6',
-        '#85e3fb',
-        '#91ebff',
-        '#a1efff',
-        '#b0f4ff'
-      ],
-      xAxis: {
-        categories: categorias,
-        labels: {
-          style: {
-            fontWeight: 'bold'
-          }
-        }
-      },
-      yAxis: {
-        title: {
-          text: ''
-        },
-        labels: {
-          style: {
-            fontWeight: 'bold'
-          }
-        }
-      },
-      plotOptions: {
-        column: {
-          pointPadding: 0.2,
-          borderWidth: 0,
-          borderRadius: 7
-        }
-      },
-      series: [{
-        type: 'column',
-        name: 'Votos',
-        borderRadius: 5,
-        colorByPoint: true,
-        data: dados,
-        showInLegend: false
-      }]
-    });
-
-    document.getElementById('plain').addEventListener('click', () => {
-      chart.update({
-        chart: {
-          inverted: false,
-          polar: false,
-        },
-      });
-    });
-
-    document.getElementById('inverted').addEventListener('click', () => {
-      chart.update({
-        chart: {
-          inverted: true,
-          polar: false
-        },
-      });
-    });
-
-  });
-  /*]]>*/
-</script>
+<script layout:fragment="scripts" th:src="@{/assets/js/relatorios/main.js}" defer></script>
 <body>
 <main layout:fragment="content">
   <div class="votacaoDash__header-content">
@@ -172,13 +28,11 @@
           <span>Filtrar <i class="bi bi-filter"></i></span>
           <div>
             <form th:action="@{/relatorio/geral}" method="GET">
-              <button class="dataTable__button">Relatório Geral</button>
+              <button class="dataTable__button" type="submit">Relatório Geral</button>
             </form>
           </div>
           <div>
-            <form th:action="@{/gerarVotos}" method="POST">
-              <button class="dataTable__button">Gerar Votos</button>
-            </form>
+            <button class="dataTable__button" type="button" data-bs-toggle="modal" data-bs-target="#generateVotesModal">Gerar Votos</button>
           </div>
         </div>
       </div>
@@ -206,6 +60,181 @@
       </table>
     </div>
   </div>
+
+  <div class="modal fade" id="generateVotesModal" tabindex="-1" aria-labelledby="generateVotesModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-votos__header">
+          <div class="modal-votos__icon-container">
+            <i class="bi bi-exclamation-triangle-fill modal-votos__icon"></i>
+          </div>
+        </div>
+        <div class="modal-body">
+          <h4 class="text-center mb-3">Espere! Espere! Leia com Atenção!</h4>
+          <div class="alert alert-info fw-semibold text-center mb-0">
+            Ao confirmar esta ação, os funcionários que <strong>não tiverem voto registrado</strong>
+            serão atribuídos à empresa com a <strong>maior quantidade de votos</strong> no sistema.
+          </div>
+        </div>
+        <div class="modal-votos__footer">
+          <button type="button" class="modal-votos__botoes modal-votos__botoes--cancelar" id="cancelVotes" data-bs-dismiss="modal">Cancelar</button>
+          <form th:action="@{/gerarVotos}" method="POST" id="genetareVotesForm" style="width: 100%;">
+            <button type="submit" class="modal-votos__botoes" id="generateVotes">Confirmar</button>
+            <button type="button" class="modal-votos__botoes modal-votos__processing" id="processingVote" disabled>
+              <span class="spinner-border spinner-border-sm" style="margin-right: 3px;" role="status" aria-hidden="true"></span>
+              <span>Processando...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function () {
+      const empresasTopFive = /*[[${empresasTopFive}]]*/[];
+      const dadosTopFive = /*[[${dadosTopFive}]]*/[];
+
+      const categorias = /*[[${empresasRanking}]]*/ [];
+      const dados = /*[[${votosRanking}]]*/ [];
+
+      const chart = Highcharts.chart('votos', {
+        chart: {
+          events: {
+            fullscreenOpen: function () {
+              this.update({
+                xAxis: {
+                  categories: categorias
+                },
+                series: {
+                  data: dados,
+                }
+              });
+            },
+            fullscreenClose: function () {
+              this.update({
+                xAxis: {
+                  categories: categorias
+                },
+                series: {
+                  data: dados,
+                }
+              });
+            }
+          },
+          inverted: true
+        },
+        lang: {
+          viewFullscreen: "Dados Completos",
+          printChart: "Imprimir Gráfico",
+          exitFullscreen: "Dados simples",
+          noData: "Ainda não há dados para realizar as análises"
+        },
+        noData: {
+          style: {
+            fontWeight: 'bold',
+            fontSize: '16px',
+            fontFamily: 'system-ui',
+            color: 'rgba(48,48,48,0.7)'
+          }
+        },
+        exporting: {
+          buttons: {
+            contextButton: {
+              menuItems: [
+                'viewFullscreen',
+                'printChart',
+                'separator',
+                'downloadPNG',
+                'downloadJPEG',
+                'downloadSVG',
+                'separator',
+                'downloadCSV',
+                'downloadXLS'
+              ]
+            }
+          }
+        },
+        title: {
+          text: 'Votos por empresa'
+        },
+        credits: {
+          enabled: false
+        },
+        colors: [
+          '#104072',
+          '#194c82',
+          '#235893',
+          '#2d64a4',
+          '#3770b5',
+          '#418cc5',
+          '#4ba8d6',
+          '#55c4e7',
+          '#61ccec',
+          '#6dd3f1',
+          '#79dbf6',
+          '#85e3fb',
+          '#91ebff',
+          '#a1efff',
+          '#b0f4ff'
+        ],
+        xAxis: {
+          categories: categorias,
+          labels: {
+            style: {
+              fontWeight: 'bold'
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: ''
+          },
+          labels: {
+            style: {
+              fontWeight: 'bold'
+            }
+          }
+        },
+        plotOptions: {
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0,
+            borderRadius: 7
+          }
+        },
+        series: [{
+          type: 'column',
+          name: 'Votos',
+          borderRadius: 5,
+          colorByPoint: true,
+          data: dados,
+          showInLegend: false
+        }]
+      });
+
+      document.getElementById('plain').addEventListener('click', () => {
+        chart.update({
+          chart: {
+            inverted: false,
+            polar: false,
+          },
+        });
+      });
+
+      document.getElementById('inverted').addEventListener('click', () => {
+        chart.update({
+          chart: {
+            inverted: true,
+            polar: false
+          },
+        });
+      });
+
+    });
+    /*]]>*/
+  </script>
 </main>
 </body>
 </html>
