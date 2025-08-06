@@ -2,6 +2,7 @@ package br.com.rianporfirio.sistemavotacao.web;
 
 import br.com.rianporfirio.sistemavotacao.domain.Empresa;
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
+import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
 import br.com.rianporfirio.sistemavotacao.dto.RankingVotosDto;
 import br.com.rianporfirio.sistemavotacao.dto.UsuariosDto;
@@ -48,9 +49,10 @@ public class DashboardController {
     public String enterprises(Model model, HttpServletRequest req, @RequestParam(value = "search", required = false) String search) {
         getCurrentPath(model, req);
 
-        List<Empresa> empresas =
-                (search == null || search.isBlank()) ? empresaService.getAll() : empresaService.listByName(search);
-        model.addAttribute("empresas", empresas);
+        List<Empresa> empresas = (search == null || search.isBlank()) ? empresaService.getAll() : empresaService.listByName(search);
+        List<EmpresaDto> dtos = empresas.stream().map(EmpresaDto::new).toList();
+
+        model.addAttribute("empresas", dtos);
         model.addAttribute("search", search);
 
         return fragmentPath + "/empresas";
@@ -92,7 +94,8 @@ public class DashboardController {
         model.addAttribute("status", status);
         model.addAttribute("search", search);
         model.addAttribute("size", size);
-        model.addAttribute("votos", repository.findAll());
+        var votos = repository.findAll();
+        model.addAttribute("votos", votos);
 
         return fragmentPath + "/votacao";
     }
@@ -105,10 +108,9 @@ public class DashboardController {
                            @RequestParam(value = "size", defaultValue = "60") int size) {
         getCurrentPath(model, req);
 
-        List<Empresa> empresas =
-                (search == null || search.isBlank()) ? empresaService.getAll() : empresaService.listByName(search);
-        model.addAttribute("empresas", empresas);
-        model.addAttribute("search", search);
+        List<Empresa> empresas = (search == null || search.isBlank()) ? empresaService.getAll() : empresaService.listByName(search);
+        List<EmpresaDto> dtos = empresas.stream().map(EmpresaDto::new).toList();
+        model.addAttribute("empresas", dtos);
 
         RankingVotosDto ranking = rankingEmpresaService.getRanking();
 

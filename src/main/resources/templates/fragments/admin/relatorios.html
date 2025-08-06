@@ -193,7 +193,7 @@
         <tbody class="dataTable__body" id="tabelaEmpresas" style="max-height: 330px">
         <tr th:each="empresa : ${empresas}">
           <td>
-            <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
+            <img th:src="@{${empresa.filePath}}" class="dataTable__image" alt="logo">
           </td>
           <td th:text="${empresa.nome}" style="width: 40%"></td>
           <td style="width: 10%">
