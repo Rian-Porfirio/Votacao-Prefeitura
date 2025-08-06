@@ -8,24 +8,33 @@ const cnpjInput = document.getElementById('cnpjModalAdd');
 
 const dragContainer = document.getElementById('dragContainer');
 
-const modalCreate = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAddOption'))
+const modalEmpresa = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalEmpresa'))
 const errorModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalErrorToggle'));
 
 const cancelarBtn = document.getElementById('cancelarBtn');
+const confirmText = document.getElementById('confirmText');
+
+window.isEditing = false;
 
 cnpjInput.addEventListener('input', () => {
     let value = cnpjInput.value.replace(/\D/g, '');
     cnpjInput.value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
 });
 
+document.getElementById('novaEmpresa').addEventListener('click', () => {
+    confirmText.textContent = "Registrar";
+    isEditing = false;
+})
+
 createForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    let endpoint = isEditing ? "/update" : "/create";
     const form = e.target;
     const formData = new FormData(form);
 
     try {
-        const res = await fetch("/create", {
+        const res = await fetch(endpoint, {
             body: formData,
             method: "POST"
         });
@@ -45,14 +54,14 @@ createForm.addEventListener('submit', async (e) => {
             return;
         }
 
-        createForm.reset();
+        resetModal(isEditing);
         removeErrors();
         successFeedback();
     } catch (e) {
         const error = createError("Verifique Sua Conexão com Internet ou Contate um Desenvolvedor")
         setModalError(error);
     }
-})
+});
 
 function setInputError(error) {
     let errorMessage = error.textContent;
@@ -102,13 +111,12 @@ function createError(message) {
 function setModalError(error) {
     const errorModalMessage = document.getElementById("errorModalMessage");
     errorModalMessage.textContent = error.textContent;
-    modalCreate.hide();
+    modalEmpresa.hide();
     errorModal.show();
 }
 
 function successFeedback() {
     const btnConfirm = document.getElementById('confirmCreate');
-    const confirmText = document.getElementById('confirmText');
     const loading = document.getElementById('loading');
     const successText = document.getElementById('successText');
 
@@ -146,3 +154,10 @@ function fadeOut(el) {
 cancelarBtn.addEventListener('click', () => {
     window.location.reload();
 })
+
+function resetModal() {
+    if (isEditing) {
+        return;
+    }
+    createForm.reset();
+}

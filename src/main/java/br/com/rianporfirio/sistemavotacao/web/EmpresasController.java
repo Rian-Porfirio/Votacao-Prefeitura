@@ -1,6 +1,6 @@
 package br.com.rianporfirio.sistemavotacao.web;
 
-import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
+import br.com.rianporfirio.sistemavotacao.dto.EmpresaFormDto;
 import br.com.rianporfirio.sistemavotacao.service.EmpresaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,9 @@ public class EmpresasController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto) throws IOException {
+    public ResponseEntity<String> createEmpresa(@ModelAttribute EmpresaFormDto empresaFormDto, @RequestParam("foto") MultipartFile foto) throws IOException {
         try {
-            empresaService.create(empresaDto, foto);
+            empresaService.create(empresaFormDto, foto);
             return ResponseEntity.ok("Empresa Registrada Com Sucesso");
         } catch (Exception ex) {
             log.error("não foi possível inserir uma nova empresa no sistema. Motivo: {}", ex.getMessage());
@@ -32,28 +32,29 @@ public class EmpresasController {
         }
     }
 
-    @PostMapping("/update/{id}")
-    public String updateEmpresa(@ModelAttribute EmpresaDto empresaDto, @RequestParam("foto") MultipartFile foto, @PathVariable long id) {
+    @PostMapping("/update")
+    public ResponseEntity<String> updateEmpresa(@ModelAttribute EmpresaFormDto empresaFormDto, @RequestParam("foto") MultipartFile foto, @ModelAttribute("empresaId") long empresaId) throws IOException {
         try {
-            empresaService.update(empresaDto, id, foto);
+            empresaService.update(empresaFormDto, empresaId, foto);
+            return ResponseEntity.ok("Empresa Atualizada Com Sucesso");
         } catch (Exception ex) {
             log.error("não foi possível atualizar a empresa. Motivo: {}", ex.getMessage());
+            throw ex;
         }
-        return defaultRedirect;
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteEmpresa(@PathVariable long id) {
+    @PostMapping("/delete")
+    public String deleteEmpresa(@ModelAttribute("empresaId") long empresaId) {
         try {
-            empresaService.delete(id);
+            empresaService.delete(empresaId);
         } catch (Exception ex) {
             log.error("Não foi possível deletar a empresa. Motivo: {}", ex.getMessage());
         }
         return defaultRedirect;
     }
 
-    @PostMapping("/status/change/{empresaId}")
-    public String changeStatus(@PathVariable long empresaId) {
+    @PostMapping("/status/change")
+    public String changeStatus(@ModelAttribute("changeStatus") long empresaId) {
         empresaService.changeStatus(empresaId);
         return defaultRedirect;
     }

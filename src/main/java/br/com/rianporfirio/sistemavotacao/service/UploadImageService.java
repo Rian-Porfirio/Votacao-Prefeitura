@@ -1,9 +1,9 @@
 package br.com.rianporfirio.sistemavotacao.service;
 
+import br.com.rianporfirio.sistemavotacao.utils.AuthUtils;
+import br.com.rianporfirio.sistemavotacao.utils.NameUtils;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,7 +30,8 @@ public class UploadImageService {
             throw new ValidationException("Arquivo Não Suportado. Por favor, Envie Apenas PNG, JPG e JPEG .");
         }
 
-        Path uploadPath = Paths.get(logosFolder, name);
+        String folderName = NameUtils.removeSpaces(name);
+        Path uploadPath = Paths.get(logosFolder, folderName);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
@@ -39,11 +40,11 @@ public class UploadImageService {
         Path completePath = uploadPath.resolve(filename);
         file.transferTo(completePath);
 
-        return "/logos/" + name + "/" + filename;
+        return pathToSave(folderName, filename);
     }
 
     public void deleteDirectory(String name) throws IOException {
-        Path deletePath = Paths.get(logosFolder, name);
+        Path deletePath = Paths.get(logosFolder, NameUtils.removeSpaces(name));
 
         if (!Files.exists(deletePath)) {
             log.debug("Diretório '{}' não encontrado", deletePath);
@@ -76,14 +77,25 @@ public class UploadImageService {
         }
     }
 
-    private String currentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getName();
+    public String updateFolderName(String originalPath, String name) throws IOException {
+        String relativePath = originalPath.replaceFirst("^/logos/", ""); // remove /logos/ do início da ‘String’.
+        Path oldUploadPath = Paths.get(logosFolder, relativePath).getParent();
+        Path newUploadPath = Paths.get(logosFolder, NameUtils.removeSpaces(name));
+
+        if (!Files.exists(oldUploadPath)) {
+            throw new ValidationException("Erro ao renomear diretório de arquivos");
+        }
+
+        Files.move(oldUploadPath, newUploadPath);
+        String filename = Paths.get(originalPath).getFileName().toString();
+        return pathToSave(NameUtils.removeSpaces(name), filename);
     }
 
     private String buildFileName(String filename) {
-        return currentUser() + "_" + System.currentTimeMillis() + filename;
+        return AuthUtils.currentUsername() + "_" + System.currentTimeMillis() + filename;
+    }
+
+    private String pathToSave(String empresa, String filename) {
+        return "/logos/" + empresa + "/" + filename;
     }
 }
-
-
