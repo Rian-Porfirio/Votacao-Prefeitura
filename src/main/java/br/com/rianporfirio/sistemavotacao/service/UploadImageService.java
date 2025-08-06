@@ -30,7 +30,7 @@ public class UploadImageService {
             throw new ValidationException("Arquivo Não Suportado. Por favor, Envie Apenas PNG, JPG e JPEG .");
         }
 
-        String folderName = NameUtils.removeSpaces(name);
+        String folderName = NameUtils.removePontuationAndSpaces(name);
         Path uploadPath = Paths.get(logosFolder, folderName);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -44,7 +44,7 @@ public class UploadImageService {
     }
 
     public void deleteDirectory(String name) throws IOException {
-        Path deletePath = Paths.get(logosFolder, NameUtils.removeSpaces(name));
+        Path deletePath = Paths.get(logosFolder, NameUtils.removePontuationAndSpaces(name));
 
         if (!Files.exists(deletePath)) {
             log.debug("Diretório '{}' não encontrado", deletePath);
@@ -80,7 +80,7 @@ public class UploadImageService {
     public String updateFolderName(String originalPath, String name) throws IOException {
         String relativePath = originalPath.replaceFirst("^/logos/", ""); // remove /logos/ do início da ‘String’.
         Path oldUploadPath = Paths.get(logosFolder, relativePath).getParent();
-        Path newUploadPath = Paths.get(logosFolder, NameUtils.removeSpaces(name));
+        Path newUploadPath = Paths.get(logosFolder, NameUtils.removePontuationAndSpaces(name));
 
         if (!Files.exists(oldUploadPath)) {
             throw new ValidationException("Erro ao renomear diretório de arquivos");
@@ -88,7 +88,7 @@ public class UploadImageService {
 
         Files.move(oldUploadPath, newUploadPath);
         String filename = Paths.get(originalPath).getFileName().toString();
-        return pathToSave(NameUtils.removeSpaces(name), filename);
+        return pathToSave(NameUtils.removePontuationAndSpaces(name), filename);
     }
 
     private String buildFileName(String filename) {
