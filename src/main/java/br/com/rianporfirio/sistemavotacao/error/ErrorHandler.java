@@ -1,6 +1,6 @@
 package br.com.rianporfirio.sistemavotacao.error;
 
-import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegisteredException;
+import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteRegisterException;
 import jakarta.validation.ValidationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 public class ErrorHandler {
 
     @ResponseBody
-    @ExceptionHandler(VoteAlreadyRegisteredException.class)
-    public ResponseEntity<Object> handleVotingError(VoteAlreadyRegisteredException ex) {
+    @ExceptionHandler(VoteRegisterException.class)
+    public ResponseEntity<Object> handleVotingError(VoteRegisterException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
@@ -25,7 +25,7 @@ public class ErrorHandler {
 
     @ResponseBody
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<Object> maxSizeFileUploadError(MaxUploadSizeExceededException ex) {
-        return ResponseEntity.badRequest().body("Arquivo excede o limite de 2MB");
+    public ResponseEntity<Object> maxSizeFileUploadError() {
+        return ResponseEntity.badRequest().body("Arquivo excede o limite de 2 MB");
     }
 }

@@ -709,6 +709,7 @@ nav {
     flex: 1;
     background-color: var(--cor-de-fundo);
     border-radius: 0 0.5rem 0.5rem 0;
+    padding: 2rem;
 }
 
 .modalEmpresa__preview-content {

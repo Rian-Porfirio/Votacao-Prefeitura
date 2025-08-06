@@ -1,6 +1,6 @@
 package br.com.rianporfirio.sistemavotacao.domain;
 
-import br.com.rianporfirio.sistemavotacao.dto.EmpresaDto;
+import br.com.rianporfirio.sistemavotacao.dto.EmpresaFormDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class Empresa {
 
-    public Empresa(EmpresaDto dto) {
+    public Empresa(EmpresaFormDto dto) {
         setNome(dto.nome());
     }
 

@@ -3,7 +3,7 @@ package br.com.rianporfirio.sistemavotacao.service;
 import br.com.rianporfirio.sistemavotacao.domain.Funcionario;
 import br.com.rianporfirio.sistemavotacao.domain.Voto;
 import br.com.rianporfirio.sistemavotacao.dto.FuncionarioInfoDto;
-import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteAlreadyRegisteredException;
+import br.com.rianporfirio.sistemavotacao.error.exceptions.VoteRegisterException;
 import br.com.rianporfirio.sistemavotacao.repository.IFuncionarioRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IEmpresaRepository;
 import br.com.rianporfirio.sistemavotacao.repository.IVotoRepository;
@@ -32,16 +32,20 @@ public class FuncionarioService {
     }
 
     public void inserirVoto(long empresaId, String matricula) {
-        var empresa = empresaRepository.findById(empresaId).get();
         var funcionario = funcionarioRepository.findByMatricula(matricula);
-
         if(funcionario.getEmpresa() != null) {
-            throw new VoteAlreadyRegisteredException("Usuário já possui voto registrado");
+            throw new ValidationException("Usuário já possui voto registrado");
         }
 
-        funcionario.votar(empresa);
-        funcionarioRepository.save(funcionario);
-        votoRepository.save(new Voto(funcionario, empresa, LocalDateTime.now()));
+        try {
+            var empresa = empresaRepository.findById(empresaId).get();
+            votoRepository.save(new Voto(funcionario, empresa, LocalDateTime.now()));
+            
+            funcionario.votar(empresa);
+            funcionarioRepository.save(funcionario);
+        } catch (Exception ex) {
+            throw new VoteRegisterException("Houve um erro ao registrar seu voto.");
+        }
     }
 
     public List<Funcionario> getAll() {

@@ -2,6 +2,7 @@ const dragContainer = document.getElementById('dragContainer');
 const dragArea = document.getElementById('dragArea')
 const inputImagem = document.getElementById('imageAdd');
 const imagemPreview = document.getElementById('previewImage');
+const defaultImage = "/assets/images/no-image-background.png";
 const maxFileSize = 2 * 1024 * 1024 // 2MB
 
 function preventDefault(event) {
@@ -41,7 +42,7 @@ function handleFileUpload(event) {
     }
 
     if (file.size > maxFileSize) {
-        setErrorMessage("Arquivo excede o limite de 2MB");
+        setErrorMessage("Arquivo excede o limite de 2 MB");
         return;
     }
 
@@ -75,13 +76,14 @@ dragEvents.map(event => {
 })
 
 function setImagePreview(e) {
-    if (e) {
-        imagemPreview.src = e.target.result;
-        imagemPreview.style.setProperty('object-fit', 'cover');
-    } else {
-        imagemPreview.src = "/assets/images/no-image-background.png";
+    if (!e) {
+        imagemPreview.src = defaultImage;
         imagemPreview.style.setProperty('object-fit', 'contain');
+        return;
     }
+
+    imagemPreview.src = e.target.result;
+    imagemPreview.style.setProperty('object-fit', 'cover');
 }
 
 function removeErrors() {

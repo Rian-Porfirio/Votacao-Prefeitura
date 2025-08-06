@@ -17,7 +17,7 @@
                     <span>Mostrar <i class="bi bi-caret-down"></i></span>
                     <span>Filtrar <i class="bi bi-filter"></i></span>
                     <div>
-                        <button type="button" class="dataTable__button" data-bs-toggle="modal" data-bs-target="#modalAddOption">
+                        <button type="button" class="dataTable__button" id="novaEmpresa" data-bs-toggle="modal" data-bs-target="#modalEmpresa">
                             + Nova Empresa
                         </button>
                     </div>
@@ -39,7 +39,7 @@
                 <tbody class="dataTable__body" id="tabelaEmpresas" style="max-height: 700px">
                 <tr th:each="empresa : ${empresas}">
                     <td>
-                        <img th:src="@{${empresa.getFilePath}}" class="dataTable__image" alt="logo">
+                        <img th:src="@{${empresa.filePath}}" class="dataTable__image" alt="logo">
                     </td>
                     <td style="width: 20%; word-break: break-all;" th:text="${empresa.nome}"></td>
                     <td th:text="${empresa.cnpj}"></td>
@@ -48,17 +48,18 @@
                         <div th:if="${!empresa.isAtivo()}" class="dataTable__status dataTable__status--false">Inativo</div>
                     </td>
                     <td style="width: 10%">
-                        <div class="dataTable__actions">
-                            <form method="post" th:action="@{/status/change/{id}(id=${empresa.getId()})}">
+                        <div class="dataTable__actions" th:attr="empresa=${empresa.id}">
+                            <form method="post" th:action="@{/status/change}">
+                                <input name="changeStatus" hidden th:value="${empresa.id}" type="text">
                                 <button type="submit" class="dataTable__action-button">
                                     <i th:if="${empresa.isAtivo()}" class="bi bi-ban"></i>
                                     <i th:if="${!empresa.isAtivo()}" class="bi bi-check2"></i>
                                 </button>
                             </form>
-                            <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalEdit' + ${empresa.getId()}">
+                            <button type="button" class="dataTable__action-button edit-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalEmpresa'">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <button type="button" class="dataTable__action-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalDelete' + ${empresa.getId()}">
+                            <button type="button" class="dataTable__action-button delete-button" data-bs-toggle="modal" th:attr="data-bs-target='#modalDelete'">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -68,63 +69,19 @@
             </table>
         </div>
 
-    <div th:each="empresa : ${empresas}">
-        <div th:fragment="~{/fragments/card::empresaCard (${empresa}, false)}"></div>
-        <div class="modal fade" th:id="'modalDelete' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body modal-delete">
-                        <h4>Excluir Empresa?</h4>
-                        <div>
-                            <p>Ao excluir a empresa, todos os usuários relacionados a ela terão seus <strong>votos removidos</strong>.</p>
-                        </div>
-                        <div class="modal-delete__botoes">
-                            <form th:action="@{/delete/{id}(id=${empresa.getId()})}" method="post">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-danger">Excluir</button>
-                            </form>
-                        </div>
+    <div class="modal fade" id="modalDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body modal-delete">
+                    <h4>Excluir Empresa?</h4>
+                    <div>
+                        <p>Ao excluir a empresa, todos os funcionários relacionados a ela terão seus <strong>votos removidos</strong>.</p>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" th:id="'modalEdit' + ${empresa.getId()}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditDropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" th:id="modalEditDropLabel + ${empresa.id}">Editar empresa</h5>
-                    </div>
-                    <div class="modal-body">
-                        <form th:action="@{/update/{id}(id=${empresa.getId()})}" method="post" enctype="multipart/form-data" class="modalEmpresaEdit">
-                            <div>
-                                <label th:for="nameModalEdit + ${empresa.id}" class="form-label">Nome da Empresa *</label>
-                                <input minlength="3" type="text" name="nome" th:value="${empresa.nome}" class="form-control" th:id="nameModalEdit + ${empresa.id}" placeholder="Insira o nome da empresa" aria-describedby="nome empresa">
-                            </div>
-                            <div>
-                                <label th:for="cnpjModalEdit + ${empresa.id}" class="form-label">CNPJ *</label>
-                                <input maxlength="18" type="text" name="cnpj" th:value="${empresa.cnpj}" class="form-control" th:id="cnpjModalEdit + ${empresa.id}" placeholder="00.000.000/0000-00" aria-describedby="cnpj empresa">
-                            </div>
-                            <div>
-                                <label th:for="descricaoModalEdit + ${empresa.id}" class="form-label">Descrição</label>
-                                <textarea  maxlength="200" class="form-control" th:id="descricaoModalEdit + ${empresa.id}" th:text="${empresa.descricao}" rows="3" style="resize: none; height: 120px;" name="descricao"></textarea>
-                            </div>
-                            <div class="modalEmpresa__file-upload">
-                                <label th:for="imageEdit + ${empresa.id}" class="modalEmpresa__file-label">
-                                    <b>Clique para enviar</b>
-                                    <input type="file"
-                                           class="modalEmpresa__file-upload"
-                                           th:id="imageEdit + ${empresa.id}"
-                                           accept=".jpg, .jpeg, .png"
-                                           name="foto"
-                                           hidden
-                                    >
-                                </label>
-                            </div>
-                            <div class="modalEmpresa__button-container">
-                                <button type="button" class="modalEmpresa__button modalEmpresa__button-cancelar" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="modalEmpresa__button modalEmpresa__button-confirmar">Confirmar Edição</button>
-                            </div>
+                    <div class="modal-delete__botoes">
+                        <form th:action="@{/delete}" method="post">
+                            <input hidden type="text" id="deleteInput" name="empresaId"/>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger">Excluir</button>
                         </form>
                     </div>
                 </div>
@@ -132,13 +89,14 @@
         </div>
     </div>
 
-    <div class="modal fade modal-xl" id="modalAddOption" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddOptionDropLabel" aria-hidden="true">
+    <div class="modal fade modal-xl" id="modalEmpresa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEmpresaDropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body" style="padding: 0">
                         <div class="modalEmpresa__content">
                             <div class="modalEmpresa__formulario-container">
                                 <form th:action="@{/create}" method="post" enctype="multipart/form-data" id="formNovaEmpresa">
+                                    <input hidden type="text" id="editInput" name="empresaId"/>
                                     <div id="nameInputContainer">
                                         <label for="nameModalAdd" class="form-label">Nome da Empresa *</label>
                                         <input required minlength="3" type="text" name="nome" class="form-control" id="nameModalAdd" placeholder="Insira o nome da empresa" aria-describedby="nome empresa">
@@ -168,10 +126,10 @@
                                         <button type="submit" class="modalEmpresa__button modalEmpresa__button-confirmar" id="confirmCreate">
                                             <span id="loading" class="process-text">
                                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                <span> Processando...</span>
+                                                <span>Processando...</span>
                                             </span>
-                                            <span id="confirmText" class="process-text visible">Confirmar</span>
-                                            <span id="successText" class="process-text">Empresa Registrada</span>
+                                            <span id="confirmText" class="process-text visible">Registrar</span>
+                                            <span id="successText" class="process-text">Concluído</span>
                                         </button>
                                     </div>
                                 </form>
@@ -198,6 +156,32 @@
                 </div>
             </div>
         </div>
+
+    <script th:inline="javascript">
+        let empresas = /*[[${empresas}]]*/[];
+
+        const descricaoInput = document.getElementById('descricaoModalAdd');
+        const imagePreview = document.getElementById('previewImage');
+        const cnpjInput = document.getElementById('cnpjModalAdd');
+        const nameInput = document.getElementById('nameModalAdd');
+
+        document.querySelectorAll(".edit-button").forEach(btn => {
+            btn.addEventListener('click', () => {
+                isEditing = true;
+
+                const empresaId = btn.parentElement.getAttribute('empresa');
+                const empresa = empresas.find(empresa => empresa.id === parseInt(empresaId));
+
+                confirmText.textContent = "Editar"
+                editInput.value = empresaId;
+                nameInput.value = empresa.nome;
+                cnpjInput.value = empresa.cnpj;
+                descricaoInput.value = empresa.descricao;
+                imagePreview.src = empresa.filePath;
+                imagePreview.style.setProperty('object-fit', 'cover');
+            });
+        });
+    </script>
 </main>
 </body>
 </html>

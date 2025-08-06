@@ -1,5 +1,6 @@
 import './inputValidation.js';
 import './uploadFile.js';
+import './actions.js';
 
 const campos = [
     {
