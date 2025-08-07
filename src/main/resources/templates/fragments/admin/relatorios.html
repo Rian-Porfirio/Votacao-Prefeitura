@@ -66,7 +66,7 @@
       <div class="modal-content">
         <div class="modal-votos__header">
           <div class="modal-votos__icon-container">
-            <i class="bi bi-exclamation-triangle-fill modal-votos__icon"></i>
+            <i class="bi bi-exclamation-octagon-fill modal-votos__icon"></i>
           </div>
         </div>
         <div class="modal-body">
@@ -77,10 +77,10 @@
           </div>
         </div>
         <div class="modal-votos__footer">
-          <button type="button" class="modal-votos__botoes modal-votos__botoes--cancelar" id="cancelVotes" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="modal-button modal-button--cancel" id="cancelVotes" data-bs-dismiss="modal">Cancelar</button>
           <form th:action="@{/gerarVotos}" method="POST" id="genetareVotesForm" style="width: 100%;">
-            <button type="submit" class="modal-votos__botoes" id="generateVotes">Confirmar</button>
-            <button type="button" class="modal-votos__botoes modal-votos__processing" id="processingVote" disabled>
+            <button type="submit" class="modal-button modal-votos__botoes" id="generateVotes">Confirmar</button>
+            <button type="button" class="modal-button modal-votos__processing" id="processingVote" disabled>
               <span class="spinner-border spinner-border-sm" style="margin-right: 3px;" role="status" aria-hidden="true"></span>
               <span>Processando...</span>
             </button>
