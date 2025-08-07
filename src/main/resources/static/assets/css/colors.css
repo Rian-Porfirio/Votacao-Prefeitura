@@ -15,7 +15,11 @@
     --fonte-verde-80: #004E00;
     --container-verde-85: #A8FFB8;
     --fonte-vermelho-escuro: #4E0000;
-    --container-vermelho-75: #FF8888;
+    --fonte-vermelho-delete: #ce0b1e;
+    --fonte-vermelho-delete-hover: #b20616;
+    --container-vermelho-75: #ff9393;
+    --vermelho-delete: #ffaeaa;
+    --vermelho-delete-50: rgba(255, 174, 170, 0.5);
     --azul-cadastrados: #228be6;
     --amarelo-aptos: #fab005;
     --vermelho-inaptos: #fa5252;

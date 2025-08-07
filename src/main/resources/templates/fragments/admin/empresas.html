@@ -72,16 +72,21 @@
     <div class="modal fade" id="modalDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDeleteDropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-body modal-delete">
-                    <h4>Excluir Empresa?</h4>
-                    <div>
-                        <p>Ao excluir a empresa, todos os funcionários relacionados a ela terão seus <strong>votos removidos</strong>.</p>
+                <div class="modal-delete__header">
+                    <div class="modal-delete__icon-container">
+                        <i class="bi bi-trash modal-delete__icon"></i>
                     </div>
-                    <div class="modal-delete__botoes">
-                        <form th:action="@{/delete}" method="post">
+                </div>
+                <div class="modal-body modal-delete__body">
+                    <h4 class="modal-delete__title">Excluir Empresa?</h4>
+                    <div class="text-center">
+                        <p>Ao excluir a empresa, todos os funcionários relacionados a ela terão seus <strong class="modal-delete__strong">votos removidos</strong>.</p>
+                    </div>
+                    <div class="modal-delete__botoes-container">
+                        <button type="button" class="modal-button modal-button--cancel" data-bs-dismiss="modal">Cancelar</button>
+                        <form th:action="@{/delete}" method="post" style="width: 100%">
                             <input hidden type="text" id="deleteInput" name="empresaId"/>
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-danger">Excluir</button>
+                            <button type="submit" class="modal-button modal-delete__button">Excluir Empresa</button>
                         </form>
                     </div>
                 </div>

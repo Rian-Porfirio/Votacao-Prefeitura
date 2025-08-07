@@ -986,14 +986,57 @@ nav {
     text-align: center;
 }
 
-.modal-delete {
+.modal-delete__header {
+    margin: auto;
+    padding: 1.5rem 0 0.5rem 0;
+}
+
+.modal-delete__icon-container {
+    text-align: center;
+    align-content: center;
+
+    background-color: var(--vermelho-delete);
+    border-radius: 50%;
+    outline: 6px solid var(--vermelho-delete-50);
+
+    width: 60px;
+    height: 60px;
+}
+
+.modal-delete__icon {
+    font-size: 2.1rem;
+    color: var(--fonte-vermelho-delete);
+    margin-bottom: 10px;
+}
+
+.modal-delete__body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.modal-delete__botoes {
-    justify-items: flex-end;
+.modal-delete__title {
+    text-align: center;
+    font-weight: bolder;
+}
+
+.modal-delete__strong {
+    color: var(--fonte-vermelho-delete);
+}
+
+.modal-delete__botoes-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.modal-button.modal-delete__button {
+    background-color: var(--fonte-vermelho-delete);
+    color: white;
+}
+
+.modal-button.modal-delete__button:hover {
+    background-color: var(--fonte-vermelho-delete-hover);
 }
 
 .modal-information__header {
@@ -1056,9 +1099,7 @@ nav {
 }
 
 .modal-votos__header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: auto;
     padding: 1rem 0;
 }
 
@@ -1068,6 +1109,7 @@ nav {
 
     text-align: center;
     align-content: center;
+
     background-color: var(--azul-info);
     border-radius: 50%;
     border: 5px solid var(--branco-padrao-80);
@@ -1087,7 +1129,7 @@ nav {
     padding: 1rem;
 }
 
-.modal-votos__botoes {
+.modal-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1096,9 +1138,6 @@ nav {
     max-height: 35px;
     height: 100%;
 
-    background-color: var(--azul-info);
-    color: white;
-
     border-radius: 6px;
     border: none;
     padding: 1rem 0;
@@ -1106,17 +1145,22 @@ nav {
     transition: ease 0.3s;
 }
 
-.modal-votos__botoes:hover {
+.modal-button.modal-votos__botoes {
+    background-color: var(--azul-info);
+    color: var(--branco-padrao);
+}
+
+.modal-button.modal-votos__botoes:hover {
     background-color: var(--azul-info-hover);
 }
 
-.modal-votos__botoes--cancelar {
+.modal-button.modal-button--cancel {
     background-color: var(--branco-padrao);
     border: 1px solid var(--preto-padrao-30);
     color: var(--preto-padrao);
 }
 
-.modal-votos__botoes--cancelar:hover {
+.modal-button--cancel:hover {
     background-color: var(--branco-variante-II);
     border: 1px solid var(--branco-variante-III)
 }
